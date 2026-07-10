@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 17｜金錢 Money</title>
+<style>
+:root{
+  --bg:#f7f5ef; --card:#ffffff; --ink:#2d3436; --sub:#6b7280;
+  --main:#2f7d6d; --main-soft:#e3f2ee; --accent:#e8833a; --accent-soft:#fdeede;
+  --danger:#c0392b; --danger-soft:#fdecea; --ok:#2e8b57; --ok-soft:#e6f4ea;
+  --line:#e5e0d5; --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(135deg,#2f7d6d,#3a9683);color:#fff;padding:18px 16px 14px;text-align:center}
+header h1{font-size:1.45rem;letter-spacing:.5px}
+header h1 .en{font-weight:400;opacity:.85;font-size:1.1rem}
+header .sub{font-size:.85rem;opacity:.8;margin-top:2px}
+.chips{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.chip{border:none;border-radius:999px;padding:7px 18px;font-size:.95rem;background:rgba(255,255,255,.18);color:#fff;cursor:pointer}
+.chip.on{background:#fff;color:var(--main);font-weight:700}
+main{max-width:640px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.btn{display:inline-block;border:none;border-radius:14px;padding:13px 22px;font-size:1.05rem;font-weight:700;cursor:pointer;background:var(--main);color:#fff;margin:4px 4px 4px 0;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn.sec{background:var(--main-soft);color:var(--main)}
+.btn.warm{background:var(--accent)}
+.btn.warm-soft{background:var(--accent-soft);color:var(--accent)}
+.btn.ghost{background:transparent;color:var(--sub);border:1.5px solid var(--line)}
+.btn.small{padding:8px 14px;font-size:.92rem;font-weight:600}
+.btn.big{width:100%;padding:16px;font-size:1.15rem;margin:6px 0}
+.btn:disabled{opacity:.4;cursor:default}
+.menu-item{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+.menu-item .ico{font-size:1.7rem}
+.menu-item .t{font-size:1.08rem;font-weight:700}
+.menu-item .d{font-size:.85rem;color:var(--sub)}
+.menu-item:active{background:var(--main-soft)}
+.pbar{height:10px;background:#e8e4da;border-radius:99px;overflow:hidden;margin:10px 0}
+.pbar>div{height:100%;background:linear-gradient(90deg,#3a9683,#6fc2ae);border-radius:99px;transition:width .3s}
+.word-big{font-size:2.5rem;font-weight:800;text-align:center;letter-spacing:.5px;margin:6px 0 2px}
+.kk{text-align:center;color:var(--sub);font-size:1.1rem;font-family:"Segoe UI","Arial",sans-serif}
+.tag{display:inline-block;background:var(--main-soft);color:var(--main);border-radius:8px;padding:2px 10px;font-size:.85rem;font-weight:700;margin-right:6px}
+.tag.adv{background:var(--accent-soft);color:var(--accent)}
+.tag.forms{background:#eef2fb;color:#4a6fb5}
+.sense{margin:12px 0;padding:12px 14px;background:#fbfaf6;border:1px solid var(--line);border-radius:12px}
+.sense .zh{font-weight:700;font-size:1.05rem}
+.sense .en{margin-top:6px;font-size:1.05rem;color:#1f2d3d;font-family:Georgia,"Times New Roman",serif}
+.sense .tr{color:var(--sub);font-size:.95rem;margin-top:2px}
+.extra{margin:10px 0;padding:10px 14px;border-radius:12px;font-size:.95rem}
+.extra.ph{background:#eef7ee;border:1px solid #d4e8d4}
+.extra.dv{background:#fdf6ec;border:1px solid #f0e2c8}
+.extra.nt{background:#f0f4fa;border:1px solid #d8e2f0}
+.extra b{display:block;margin-bottom:2px}
+.center{text-align:center}
+.muted{color:var(--sub);font-size:.9rem}
+.w{cursor:pointer;border-radius:4px;padding:0 1px}
+.w:active,.w.hl{background:#ffe9a8}
+.opt{display:block;width:100%;text-align:left;background:#fbfaf6;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;font-size:1.02rem;margin:8px 0;cursor:pointer;font-family:inherit;line-height:1.5}
+.opt.right{background:var(--ok-soft);border-color:var(--ok);font-weight:700}
+.opt.wrong{background:var(--danger-soft);border-color:var(--danger)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.speech-box{background:#fbfaf6;border:1.5px dashed var(--line);border-radius:12px;padding:14px;margin:10px 0;min-height:56px;font-size:1.05rem}
+.good{color:var(--ok);font-weight:700}
+.bad{color:var(--danger)}
+.banner{background:var(--accent-soft);border:1px solid #f2d9be;border-radius:12px;padding:12px 14px;font-size:.92rem;margin-bottom:12px}
+.day-row{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;border-bottom:1px dashed var(--line);font-size:.98rem}
+.day-row:last-child{border-bottom:none}
+.pill{background:var(--main-soft);color:var(--main);border-radius:99px;padding:2px 12px;font-size:.85rem;font-weight:700}
+input[type=number]{font-size:1.3rem;padding:10px;width:110px;border:1.5px solid var(--line);border-radius:12px;text-align:center;font-family:inherit}
+.dlg-line{margin:6px 0;font-size:1rem;font-family:Georgia,serif}
+.dlg-line .sp{font-weight:700;color:var(--main);font-family:inherit}
+.topnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.score-big{font-size:2.6rem;font-weight:800;color:var(--main);text-align:center}
+.grid2{display:flex;gap:10px}
+.grid2 .btn{flex:1;margin:0}
+@media(max-width:420px){body{font-size:17px}.word-big{font-size:2.1rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Unit 17｜金錢 <span class="en">Money</span></h1>
+  <div class="sub">國中英語超強字彙 Super 2500 · 分步驟學習</div>
+  <div class="chips" id="chips"></div>
+</header>
+<main id="app"></main>
+<script>
+const DATA = {"unit": 17, "topic_zh": "金錢", "topic_en": "Money", "book": "國中英語超強字彙 Super 2500", "track": {"basic": "曲目 034", "advanced": "曲目 035"}, "basic": [{"no": 1, "word": "borrow", "kk": "[ˋbɑro]", "senses": [{"pos": "v.", "zh": "借入", "en": "I've left my whiteout at home; can I borrow yours?", "zh_tr": "我把立可白留在家裡；可否把你的借給我？", "uncertain": true}], "phrases": [{"phrase": "borrow sth from sb", "zh": "從某人那借某物"}]}, {"no": 2, "word": "buy", "kk": "[baɪ]", "forms": "bought－bought", "senses": [{"pos": "v.", "zh": "買", "en": "What did you buy for your girlfriend on Valentine's Day?", "zh_tr": "你在情人節買了什麼給你的女朋友？"}]}, {"no": 3, "word": "cent", "kk": "[sɛnt]", "senses": [{"pos": "n.", "zh": "分錢", "en": "There are a hundred cents in a dollar.", "zh_tr": "一元裡有一百分錢。"}]}, {"no": 4, "word": "change", "kk": "[tʃendʒ]", "senses": [{"pos": "n.", "zh": "零錢", "en": "Here is your change.", "zh_tr": "這裡是你的零錢。"}]}, {"no": 5, "word": "cheap", "kk": "[tʃip]", "senses": [{"pos": "adj.", "zh": "便宜的", "en": "The fur coat is too cheap to be true.", "zh_tr": "這件皮外套太便宜了，可能不是真的。"}]}, {"no": 6, "word": "cost", "kk": "[kɔst]", "forms": "cost－cost", "senses": [{"pos": "v.", "zh": "花費", "en": "The tickets to that circus cost too much, and they sold very poorly.", "zh_tr": "那場馬戲團的票賣得太貴，且銷售得很差。"}]}, {"no": 7, "word": "deal", "kk": "[dil]", "forms": "dealt－dealt", "senses": [{"pos": "v.", "zh": "做買賣；經營", "en": "We have dealt with the fisherman for a long time.", "zh_tr": "我們已經和那漁夫做了很久的生意了。"}, {"pos": "v.", "zh": "處理；對付", "en": "It's very difficult for me to deal with all the problems by myself.", "zh_tr": "要獨自處理所有的問題對我而言很困難。"}, {"pos": "n.", "zh": "交易；達成協議", "en": "We made a deal with that company to supply cotton for export.", "zh_tr": "我們和那家公司達成協議，由他們供應棉花為出口之用。", "uncertain": true}]}, {"no": 8, "word": "dollar", "kk": "[ˋdɑlɚ]", "senses": [{"pos": "n.", "zh": "元", "en": "The printer cost me two thousand and three hundred dollars.", "zh_tr": "這臺印表機花了我兩千三百元。"}]}, {"no": 9, "word": "expensive", "kk": "[ɪkˋspɛnsɪv]", "senses": [{"pos": "adj.", "zh": "昂貴的", "en": "Traveling by plane is more expensive than by train.", "zh_tr": "搭飛機旅行比搭火車貴多了。"}]}, {"no": 10, "word": "lend", "kk": "[lɛnd]", "forms": "lent－lent", "senses": [{"pos": "v.", "zh": "借出", "en": "Can you lend me some money? = Can you lend some money to me?", "zh_tr": "可以借我一些錢嗎？"}], "phrases": [{"phrase": "lend sth to sb", "zh": "把某物借給某人"}]}, {"no": 11, "word": "money", "kk": "[ˋmʌnɪ]", "senses": [{"pos": "n.", "zh": "錢", "en": "The bank loaned me some money to buy the house.", "zh_tr": "銀行貸款給我去買房子。"}]}, {"no": 12, "word": "pay", "kk": "[pe]", "forms": "paid－paid", "senses": [{"pos": "v.", "zh": "付；付款", "en": "When can you pay me back?", "zh_tr": "你何時可以把錢還給我？"}]}, {"no": 13, "word": "price", "kk": "[praɪs]", "senses": [{"pos": "n.", "zh": "價錢", "en": "The price of that purse is too high.", "zh_tr": "那個女用包的價錢很高。"}], "notes": ["延伸：價錢只有高低（The price is high/low.）。絕對不可以用 expensive 或 cheap 來形容價錢。"]}, {"no": 14, "word": "prize", "kk": "[praɪz]", "senses": [{"pos": "n.", "zh": "獎（品）", "en": "Everybody wished to win first prize of the lottery.", "zh_tr": "每個人希望能贏得彩券的第一頭獎。"}], "phrases": [{"phrase": "hit the jackpot", "zh": "中頭彩（jackpot 指的是可贏得的最大賭注）", "example": "What would you do if you hit the jackpot?"}]}, {"no": 15, "word": "save", "kk": "[sev]", "senses": [{"pos": "v.", "zh": "儲蓄", "en": "We should teach the kids how to save.", "zh_tr": "我們應該教小孩如何儲蓄。"}, {"pos": "v.", "zh": "省（錢）；省（時）", "en": "It will save money if you walk to the office instead of taking the bus.", "zh_tr": "如果你走路去上班的話，就可以省下搭公車的錢。"}, {"pos": "v.", "zh": "拯救", "en": "The hero finally saved all the villagers in the film.", "zh_tr": "在影片裡，英雄最後拯救了所有的村民。"}], "derived": [{"word": "savings", "pos": "n.", "zh": "儲蓄；存款", "example": "I used my savings to buy a new car."}]}, {"no": 16, "word": "sell", "kk": "[sɛl]", "forms": "sold－sold", "senses": [{"pos": "v.", "zh": "賣", "en": "I am willing to sell my house if anyone wants to buy it.", "zh_tr": "我很願意把我的房子賣掉，假如有人要買的話。"}]}, {"no": 17, "word": "spend", "kk": "[spɛnd]", "forms": "spent－spent", "senses": [{"pos": "v.", "zh": "花費", "en": "They spent a lot of time and money building the skyscraper.", "zh_tr": "他們花了很多時間和金錢建造這棟摩天大樓。"}], "notes": ["延伸辨析：spend、cost、take 都有「花費」的意思，但用法不太一樣。spend 一定要人當主詞，且除了花錢以外，也可以花時間。至於事物（或虛主詞 it）當主詞的花時間或花錢則要用 take。而 cost 一定要事物（或虛主詞 it）當主詞，且指的只有花錢。例：I spent $100 buying the book. ＝ The book cost me $100 to buy it. ＝ It cost me $100 to buy the book.／I spent one hour reading the novel. ＝ The novel took me one hour to read. ＝ It took me one hour to read the novel."]}], "advanced": [{"no": 1, "word": "bill", "kk": "[bɪl]", "senses": [{"pos": "n.", "zh": "帳單", "en": "The bill for electricity is always higher than the bill for water.", "zh_tr": "電費的帳單總是比水費的帳單高多了。"}, {"pos": "n.", "zh": "紙鈔", "en": "I only have some big bills. Can you pay for me first?", "zh_tr": "我只有一些大鈔。你可否先幫我付？"}, {"pos": "n.", "zh": "法案", "en": "The new education bill will appear next month.", "zh_tr": "新的教育法案將會在下個月施行。"}]}, {"no": 2, "word": "cash", "kk": "[kæʃ]", "senses": [{"pos": "n.", "zh": "現金", "en": "Do you want to pay by cash or credit card?", "zh_tr": "你要付現金還是刷卡？"}, {"pos": "v.", "zh": "兌現", "en": "I need to cash a check at the bank later.", "zh_tr": "我待會要去銀行兌現一張支票。"}], "derived": [{"word": "cashier", "pos": "n.", "zh": "出納員", "example": "Her job is a cashier who takes and gives out money at that restaurant."}]}, {"no": 3, "word": "charge", "kk": "[tʃɑrdʒ]", "senses": [{"pos": "n.", "zh": "費用", "en": "When you buy the jeans, there should be no charge for alterations.", "zh_tr": "當你買牛仔褲時，修改長度應該是不會收取費用的。"}, {"pos": "v.", "zh": "索費", "en": "How much do you charge for a room for the night?", "zh_tr": "這個晚上一間房要收費多少錢？"}], "phrases": [{"phrase": "to be in charge of ＝ to take care of", "zh": "照顧", "example": "I was in charge of my younger brother when my parents were away."}]}, {"no": 4, "word": "coin", "kk": "[kɔɪn]", "senses": [{"pos": "n.", "zh": "硬幣", "en": "The couple threw a coin into the pond to make a wish.", "zh_tr": "這對情侶把硬幣丟到池塘裡許願。"}]}, {"no": 5, "word": "credit card", "kk": "[ˋkrɛdɪt ˏkɑrd]", "senses": [{"pos": "n.", "zh": "信用卡", "en": "How many credit cards do you have?", "zh_tr": "你有幾張信用卡？"}], "derived": [{"word": "credit", "pos": "n.", "zh": "信用", "example": "The old man's credit is very good."}]}, {"no": 6, "word": "currency", "kk": "[ˋkɝənsɪ]", "senses": [{"pos": "n.", "zh": "貨幣", "en": "The American teachers in China are paid in local currency.", "zh_tr": "在中國，美國教師的工資是用中國貨幣所支付。"}]}, {"no": 7, "word": "debt", "kk": "[dɛt]", "senses": [{"pos": "n.", "zh": "債務", "en": "The company was in debt to me. = The company owed me money.", "zh_tr": "這家公司欠我錢。"}], "phrases": [{"phrase": "in debt／out of debt", "zh": "負債／付清帳款", "example": "She was in debt to me when she still studied, but she has been out of debt since she made some money."}]}, {"no": 8, "word": "earn", "kk": "[ɝn]", "senses": [{"pos": "v.", "zh": "賺（錢）", "en": "In order to earn more money, he found another job in the evening.", "zh_tr": "為了要賺更多錢，他在晚上找了另一份工作。"}]}, {"no": 9, "word": "fee", "kk": "[fi]", "senses": [{"pos": "n.", "zh": "費用", "en": "The insurance company paid all her medical fees when she was ill in the hospital.", "zh_tr": "這家保險公司付了她生病住院時所有的醫療費用。"}]}, {"no": 10, "word": "fine", "kk": "[faɪn]", "senses": [{"pos": "n.", "zh": "罰金", "en": "He had to pay a NT$3,000 fine because he ran through the traffic light.", "zh_tr": "他必須要繳付新臺幣三千元的罰金，因他闖紅燈。"}, {"pos": "v.", "zh": "處以罰金", "en": "He was fined NT$3,000.", "zh_tr": "他被罰款三千元。"}]}, {"no": 11, "word": "income", "kk": "[ˋɪnˏkʌm]", "senses": [{"pos": "n.", "zh": "薪水", "en": "The banker was not satisfied with her income and decided to quit.", "zh_tr": "這位銀行家不滿意她的薪水，並且決定要辭職。"}]}, {"no": 12, "word": "loss", "kk": "[lɔs]", "senses": [{"pos": "n.", "zh": "虧損", "en": "His company had big losses last year.", "zh_tr": "他的公司去年出現巨額虧損。"}, {"pos": "n.", "zh": "遺失；損失", "en": "Have you reported the loss of your car to the police?", "zh_tr": "你已向警方報失車子了嗎？"}]}], "exercises": {"answer_source": "照片頁角未拍到官方答案，以下答案為 AI 解題結果（皆為高把握度題目）", "reading": {"title": "Reading Comprehension", "dialogue": [{"speaker": "Tina", "text": "What happened?"}, {"speaker": "Terry", "text": "I lost my wallet."}, {"speaker": "Tina", "text": "Did you feel anyone steal your wallet?"}, {"speaker": "Terry", "text": "No, I didn't."}, {"speaker": "Tina", "text": "How much was in your wallet?"}, {"speaker": "Terry", "text": "I had NT$5,000 before I bought the purse for my girlfriend."}, {"speaker": "Tina", "text": "How much did it cost you?"}, {"speaker": "Terry", "text": "It cost only NT$100."}, {"speaker": "Tina", "text": "That's too bad! So you really lost a lot."}, {"speaker": "Terry", "text": "You're right. Besides, all of my cards were lost, including the identification card, the national health insurance card, and three credit cards."}, {"speaker": "Tina", "text": "Did you call the police?"}, {"speaker": "Terry", "text": "Yes, I did."}, {"speaker": "Tina", "text": "Don't worry. Maybe the police will give you good news in a few days."}, {"speaker": "Terry", "text": "I hope so."}], "note": "national health insurance card 全民健保卡", "questions": [{"q": "What did Terry buy for his girlfriend?", "options": ["A wallet.", "A purse.", "A ring.", "Nothing."], "answer": 1}, {"q": "How much money did Terry lose?", "options": ["NT$5,000.", "NT$4,900.", "NT$100.", "NT$5,100."], "answer": 1}, {"q": "How many cards did Terry lose?", "options": ["Two.", "Three.", "Four.", "Five."], "answer": 3}, {"q": "How did Terry lose his wallet?", "options": ["Someone stole it.", "He didn't know.", "He gave it to his girlfriend.", "He threw it to the trash can."], "answer": 1}]}, "mc": {"title": "Multiple Choice", "questions": [{"q": "It ________ me one month to visit the USA.", "options": ["cost", "spend", "took", "spent"], "answer": 2}, {"q": "It ________ Tim NT$30,000 to go to England last month.", "options": ["cost", "spend", "take", "spent"], "answer": 0}, {"q": "I ________ two hundred dollars buying the coat last night.", "options": ["cost", "spend", "take", "spent"], "answer": 3}, {"q": "They ________ me NT$2,000 for a double room for a night.", "options": ["cost", "charged", "paid", "spent"], "answer": 1}, {"q": "I ________ five books from the library for my summer vacation last night.", "options": ["lent", "lend", "borrow", "borrowed"], "answer": 3}, {"q": "Would you please ________ me your scooter?", "options": ["lent", "lend", "borrow", "borrowed"], "answer": 1}, {"q": "He is heavily in ________ because he likes gambling.（gambling 賭博）", "options": ["income", "change", "fee", "debt"], "answer": 3}, {"q": "The waitress wasn't satisfied with her ________ and quit her job last month.", "options": ["deal", "income", "charge", "price"], "answer": 1}, {"q": "He forgot to pay the phone ________, so he can't make a call now.", "options": ["bill", "cash", "coin", "price"], "answer": 0}, {"q": "The writer ________ NT$1,000,000 a month by writing some novels.", "options": ["lends", "charges", "earns", "borrows"], "answer": 2}, {"q": "I don't mind ________ to have my cellphone fixed.", "options": ["lending", "paying", "borrowing", "earning"], "answer": 1}, {"q": "The driver was ________ NT$12,000 because he was driving drunk.", "options": ["dealt", "lent", "fined", "paid"], "answer": 2}, {"q": "What is the ________ of this diamond ring? It must be very high.", "options": ["price", "income", "cash", "fee"], "answer": 0}, {"q": "The man only receives low ________ because he doesn't have a good educational background.", "options": ["change", "bill", "debt", "income"], "answer": 3}, {"q": "It'll ________ some time if we take a taxi instead of walking.", "options": ["save", "spend", "take", "cost"], "answer": 0}, {"q": "The student is so independent that he is able to ________ with the problems by himself.", "options": ["decide", "charge", "deal", "cancel"], "answer": 2}, {"q": "Vicky: How much do you have in ________?  Tim: I only have big bills.", "options": ["debt", "change", "price", "cash"], "answer": 3}]}}};
+/* ================= state ================= */
+const LSKEY = 'super2500_unit17_v1';
+const ALL = DATA.basic.map(w=>({...w,level:'basic'})).concat(DATA.advanced.map(w=>({...w,level:'advanced'})));
+const byWord = {}; ALL.forEach(w=>byWord[w.word]=w);
+let S = null;
+try{ S = JSON.parse(localStorage.getItem(LSKEY)); }catch(e){}
+if(!S) S = {filter:'basic', cls:{}, plan:null, review:[], session:null};
+function save(){ localStorage.setItem(LSKEY, JSON.stringify(S)); }
+function scopeWords(f){ f = f||S.filter; return ALL.filter(w=> f==='all' || w.level===f); }
+const app = document.getElementById('app');
+
+/* ================= TTS ================= */
+let VOICE = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices().filter(v=>v.lang && v.lang.startsWith('en'));
+  VOICE = vs.find(v=>/Google US English/i.test(v.name))
+       || vs.find(v=>/Microsoft.*(Aria|Jenny|Zira|Guy|Mark).*English/i.test(v.name))
+       || vs.find(v=>v.lang==='en-US') || vs[0] || null;
+}
+pickVoice();
+if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged = pickVoice;
+function speak(text, rate, cb){
+  speechSynthesis.cancel();
+  if(!VOICE) pickVoice();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; if(VOICE) u.voice=VOICE; u.rate = rate||1;
+  if(cb) u.onend = cb;
+  speechSynthesis.speak(u);
+}
+function speakSeq(items){ // [{t,rate}]
+  speechSynthesis.cancel();
+  let i=0;
+  function next(){
+    if(i>=items.length) return;
+    const it = items[i++];
+    if(!VOICE) pickVoice();
+    const u = new SpeechSynthesisUtterance(it.t);
+    u.lang='en-US'; if(VOICE) u.voice=VOICE; u.rate=it.rate||1;
+    u.onend = ()=>setTimeout(next, 350);
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+function firstEn(w){ return w.senses[0].en.split('=')[0].trim(); }
+
+/* ============ speech recognition ============ */
+const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+function norm(s){ return (s||'').toLowerCase().replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim(); }
+
+/* ================= helpers ================= */
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function clickableEn(sentence){
+  return esc(sentence).split(/(\s+)/).map(tok=>{
+    if(/^\s+$/.test(tok)||!tok) return tok;
+    const clean = tok.replace(/[^A-Za-z']/g,'');
+    if(!clean) return tok;
+    return '<span class="w" onclick="wordTap(this,\''+clean.replace(/'/g,"\\'")+'\')">'+tok+'</span>';
+  }).join('');
+}
+function wordTap(el, w){
+  speak(w,1);
+  el.classList.add('hl'); setTimeout(()=>el.classList.remove('hl'), 900);
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function zhSummary(w){ return w.senses.map(s=>s.pos+' '+s.zh).join('｜'); }
+const CHEERS = ['太棒了！👏','很好聽喔！✨','發音很讚！🎉','答對了，繼續保持！🌟','進步看得見！💪','漂亮！🥳'];
+const COMFORT = ['沒關係，多聽幾次就會了 🙂','很接近了，再試一次看看','慢慢來，不急 🌱','這個字比較難，多練就熟了'];
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+/* ================= header chips ================= */
+function renderChips(){
+  const defs=[['basic','基礎'],['advanced','進階'],['all','全部']];
+  document.getElementById('chips').innerHTML = defs.map(d=>
+    '<button class="chip'+(S.filter===d[0]?' on':'')+'" onclick="setFilter(\''+d[0]+'\')">'+d[1]+'</button>').join('');
+}
+function setFilter(f){ S.filter=f; save(); renderChips(); home(); }
+
+/* ================= home ================= */
+function home(){
+  speechSynthesis.cancel();
+  const scope = scopeWords();
+  const clsDone = scope.filter(w=>S.cls[w.word]).length;
+  const fam = scope.filter(w=>S.cls[w.word]==='fam').length;
+  const unfam = scope.filter(w=>S.cls[w.word]==='unfam').length;
+  let h = '';
+  if(S.session){
+    h += '<div class="card center"><div style="font-size:1.05rem;font-weight:700">上次練到一半，要接著繼續嗎？</div>'+
+      '<button class="btn big warm" onclick="resumeSession()">▶ 繼續上次練習</button>'+
+      '<button class="btn ghost small" onclick="dropSession()">放棄這次進度</button></div>';
+  }
+  h += '<div class="card"><b>學習進度</b><div class="pbar"><div style="width:'+(scope.length?Math.round(clsDone/scope.length*100):0)+'%"></div></div>'+
+    '<div class="muted">已分類 '+clsDone+' / '+scope.length+' 字'+
+    (clsDone? '（熟悉 '+fam+'・不熟悉 '+unfam+'）':'')+
+    (S.plan? '　·　計畫：共 '+S.plan.days+' 天，目前第 '+S.plan.cur+' 天':'')+
+    (S.review.length? '　·　複習清單 '+S.review.length+' 字':'')+'</div></div>';
+  h += menuItem('1️⃣','步驟1｜分類測驗','看英文單字，分成「熟悉／不熟悉」兩堆','startClassify()');
+  h += menuItem('🗓️','步驟1.5｜分天計畫','決定分幾天學，自動配好每天份量', clsDone? 'planScreen()':null, clsDone? '' :'先完成分類測驗');
+  h += menuItem('📖','今日練習（步驟2→5）', S.plan? '第 '+S.plan.cur+' 天：聽發音 → 口說 → 聽力測驗' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
+  h += menuItem('🔁','步驟6｜複習', S.review.length? '複習清單有 '+S.review.length+' 個字等著你':'目前沒有要複習的字，讚！', S.review.length? 'reviewStart()':null, S.review.length?'':'');
+  h += menuItem('📝','選配｜會考題型練習','課本 Try It!：閱讀測驗 4 題＋單字選擇 17 題','exercisesScreen()');
+  h += '<div class="center muted" style="margin-top:18px">🔊 點單字或例句裡的字都能聽發音 · 進度自動儲存</div>';
+  app.innerHTML = h;
+  window.scrollTo(0,0);
+}
+function menuItem(ico,t,d,fn,lock){
+  const dis = !fn;
+  return '<button class="menu-item" '+(dis?'disabled style="opacity:.55"':'onclick="'+fn+'"')+'>'+
+    '<span class="ico">'+ico+'</span><span style="flex:1"><span class="t">'+t+'</span><br><span class="d">'+(dis&&lock?lock:d)+'</span></span><span>›</span></button>';
+}
+
+/* ================= step 1: classify ================= */
+let C = null;
+function startClassify(){
+  const pool = scopeWords().filter(w=>!S.cls[w.word]);
+  if(!pool.length){
+    const redo = scopeWords();
+    C = {pool: shuffle(redo).map(w=>w.word), i:0, redoing:true};
+  }else{
+    C = {pool: shuffle(pool).map(w=>w.word), i:0};
+  }
+  classifyCard(false);
+}
+function classifyCard(revealed, chosen){
+  if(C.i >= C.pool.length){ return classifyDone(); }
+  const w = byWord[C.pool[C.i]];
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">'+(C.i+1)+' / '+C.pool.length+'</span></div>';
+  h += '<div class="pbar"><div style="width:'+Math.round(C.i/C.pool.length*100)+'%"></div></div>';
+  h += '<div class="card center">';
+  h += '<div class="muted">這個字你熟嗎？'+(C.redoing?'（重新分類中）':'')+'</div>';
+  h += '<div class="word-big">'+esc(w.word)+' <button class="btn sec small" onclick="speak(\''+w.word.replace(/'/g,"\\'")+'\')">🔊</button></div>';
+  h += '<div class="kk">'+esc(w.kk)+'</div>';
+  if(!revealed){
+    h += '<div style="margin-top:18px" class="grid2">'+
+      '<button class="btn" onclick="clsPick(\'fam\')">😊 熟悉</button>'+
+      '<button class="btn warm" onclick="clsPick(\'unfam\')">🤔 不熟悉</button></div>';
+  }else{
+    h += '<div style="margin-top:12px;text-align:left">';
+    w.senses.forEach(s=>{ h += '<div class="sense"><span class="tag">'+esc(s.pos)+'</span><span class="zh">'+esc(s.zh)+'</span></div>'; });
+    if(w.forms) h += '<div class="center"><span class="tag forms">動詞三態：'+esc(w.forms)+'</span></div>';
+    h += '</div>';
+    h += '<div class="muted" style="margin:8px 0">你剛選了「'+(chosen==='fam'?'熟悉 😊':'不熟悉 🤔')+'」</div>';
+    h += '<button class="btn big" onclick="clsNext()">下一個 ›</button>';
+    if(chosen==='fam') h += '<button class="btn warm-soft small" onclick="clsSwitch()">咦，其實不熟 → 改為不熟悉</button>';
+  }
+  h += '</div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function clsPick(k){
+  S.cls[C.pool[C.i]] = k; save();
+  classifyCard(true, k);
+}
+function clsSwitch(){
+  S.cls[C.pool[C.i]] = 'unfam'; save();
+  classifyCard(true, 'unfam');
+}
+function clsNext(){ C.i++; classifyCard(false); }
+function classifyDone(){
+  const scope = scopeWords();
+  const fam = scope.filter(w=>S.cls[w.word]==='fam').length;
+  const unfam = scope.filter(w=>S.cls[w.word]==='unfam').length;
+  app.innerHTML = '<div class="card center"><div style="font-size:1.3rem;font-weight:800">分類完成！🎉</div>'+
+    '<div style="margin:12px 0">熟悉 <b style="color:var(--main);font-size:1.4rem">'+fam+'</b> 字　·　不熟悉 <b style="color:var(--accent);font-size:1.4rem">'+unfam+'</b> 字</div>'+
+    '<div class="muted">接下來把它們分到幾天裡，每天只練一點點就好。</div>'+
+    '<button class="btn big" onclick="planScreen()">🗓️ 去排分天計畫 ›</button>'+
+    '<button class="btn ghost small" onclick="home()">回首頁</button></div>';
+}
+
+/* ================= step 1.5: plan ================= */
+function planScreen(daysInput){
+  const scope = scopeWords();
+  const fam = scope.filter(w=>S.cls[w.word]==='fam');
+  const unfam = scope.filter(w=>S.cls[w.word]!=='fam'); // 未分類也先當不熟悉
+  const unclassified = scope.filter(w=>!S.cls[w.word]).length;
+  const days = daysInput || (S.plan? S.plan.days : 3);
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">步驟 1.5</span></div>';
+  h += '<div class="card"><b>目前狀況</b><div style="margin-top:6px">熟悉 <b style="color:var(--main)">'+fam.length+'</b> 字、不熟悉 <b style="color:var(--accent)">'+(unfam.length-unclassified)+'</b> 字'+
+       (unclassified? '<div class="muted">（還有 '+unclassified+' 字未分類，先幫你算成不熟悉）</div>':'')+'</div></div>';
+  h += '<div class="card center"><b>想分幾天學完？</b><div class="muted">建議 2～7 天，可自由填</div>'+
+    '<div style="margin:12px 0"><input type="number" id="daysIn" min="2" max="14" value="'+days+'"> 天</div>'+
+    '<button class="btn" onclick="planPreview()">產生計畫預覽</button></div>';
+  h += '<div id="planPrev">'+(S.plan? renderPlanPreview(S.plan)+'<div class="center muted">（這是已儲存的計畫，改天數可重算）</div>':'')+'</div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function buildPlan(days){
+  const scope = scopeWords();
+  const unfam = scope.filter(w=>S.cls[w.word]!=='fam').map(w=>w.word);
+  const fam = scope.filter(w=>S.cls[w.word]==='fam').map(w=>w.word);
+  const batches = Array.from({length:days},()=>[]);
+  // 不熟悉字算 2 份、熟悉字算 1 份，平均分擔
+  unfam.forEach((w,i)=>batches[i%days].push(w));
+  const off = unfam.length % days;
+  fam.forEach((w,i)=>batches[(i+off)%days].push(w));
+  return {days, batches, cur:1, done:Array(days).fill(false), filter:S.filter};
+}
+function renderPlanPreview(p){
+  let h = '<div class="card"><b>📋 '+p.days+' 天計畫</b>';
+  p.batches.forEach((b,i)=>{
+    const u = b.filter(w=>S.cls[w]!=='fam'), f = b.filter(w=>S.cls[w]==='fam');
+    h += '<div class="day-row"><span><b>第 '+(i+1)+' 天</b> '+(p.done&&p.done[i]?'✅':'')+
+      '<br><span class="muted" style="font-size:.82rem">'+b.map(w=>S.cls[w]!=='fam'?'<b style="color:var(--accent)">'+esc(w)+'</b>':esc(w)).join('、')+'</span></span>'+
+      '<span class="pill">'+u.length+' 不熟＋'+f.length+' 熟</span></div>';
+  });
+  h += '</div>';
+  return h;
+}
+function planPreview(){
+  let d = parseInt(document.getElementById('daysIn').value)||3;
+  d = Math.max(2, Math.min(14, d));
+  const p = buildPlan(d);
+  document.getElementById('planPrev').innerHTML = renderPlanPreview(p)+
+    '<div class="grid2"><button class="btn big" onclick="planSave('+d+')">✅ 就用這個計畫</button></div>'+
+    '<div class="center muted" style="margin-top:6px">不滿意？改上面的天數再按一次預覽</div>';
+  window._pendingPlan = p;
+}
+function planSave(d){
+  S.plan = window._pendingPlan || buildPlan(d);
+  save();
+  app.innerHTML = '<div class="card center"><div style="font-size:1.25rem;font-weight:800">計畫存好了！🗓️</div>'+
+    '<div class="muted" style="margin:8px 0">每天打開這頁，按「今日練習」就會拿到當天那一批字。</div>'+
+    '<button class="btn big" onclick="dailyStart()">📖 現在就開始第 '+S.plan.cur+' 天 ›</button>'+
+    '<button class="btn ghost small" onclick="home()">今天先到這，回首頁</button></div>';
+}
+
+/* ================= step 2: daily entry ================= */
+function dailyStart(){
+  if(!S.plan) return planScreen();
+  const p = S.plan;
+  if(p.done.every(x=>x)){
+    app.innerHTML = '<div class="card center"><div style="font-size:1.3rem;font-weight:800">整個計畫都完成了！🏆</div>'+
+      '<div class="muted" style="margin:10px 0">可以重新分類挑戰一次，或去複習清單掃尾。</div>'+
+      '<button class="btn big sec" onclick="home()">回首頁</button></div>';
+    return;
+  }
+  const day = p.cur;
+  const batch = p.batches[day-1].filter(w=>byWord[w]);
+  const u = batch.filter(w=>S.cls[w]!=='fam'), f = batch.filter(w=>S.cls[w]==='fam');
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">第 '+day+' 天 / 共 '+p.days+' 天</span></div>';
+  h += '<div class="card center"><b>今天要練 '+batch.length+' 個字</b>'+
+    '<div class="muted" style="margin:6px 0">不熟悉 '+u.length+' 字（<b style="color:var(--accent)">'+u.map(esc).join('、')+'</b>）'+(f.length?'<br>熟悉 '+f.length+' 字（'+f.map(esc).join('、')+'）':'')+'</div>'+
+    '<div style="margin-top:10px"><b>想先練哪一堆？</b></div>'+
+    '<div class="grid2" style="margin-top:10px">'+
+    '<button class="btn warm" onclick="beginSession(\'unfamFirst\')">先練不熟悉 💪</button>'+
+    '<button class="btn" onclick="beginSession(\'famFirst\')">先練熟悉 😊</button></div></div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function beginSession(order){
+  const p = S.plan, batch = p.batches[p.cur-1].filter(w=>byWord[w]);
+  const u = batch.filter(w=>S.cls[w]!=='fam'), f = batch.filter(w=>S.cls[w]==='fam');
+  const words = order==='famFirst' ? f.concat(u) : u.concat(f);
+  S.session = {words, idx:0, stage:'listen', isReview:false, day:p.cur, quiz:null};
+  save(); listenCard();
+}
+function resumeSession(){
+  const st = S.session.stage;
+  if(st==='listen') listenCard();
+  else if(st==='speak') speakCard();
+  else if(st==='quiz') quizCard();
+}
+function dropSession(){ S.session=null; save(); home(); }
+
+/* ================= step 3: listen round ================= */
+function stageBar(label){
+  const s = S.session;
+  const total = s.words.length;
+  return '<div class="topnav"><button class="btn ghost small" onclick="pauseToHome()">‹ 暫停</button>'+
+    '<span class="pill">'+label+'　'+(s.idx+1)+' / '+total+'</span></div>'+
+    '<div class="pbar"><div style="width:'+Math.round(s.idx/total*100)+'%"></div></div>';
+}
+function pauseToHome(){ save(); home(); }
+function wordDetailHTML(w, withEn){
+  let h = '';
+  w.senses.forEach(s=>{
+    h += '<div class="sense"><span class="tag'+(w.level==='advanced'?' adv':'')+'">'+esc(s.pos)+'</span><span class="zh">'+esc(s.zh)+'</span>';
+    if(withEn){
+      h += '<div class="en">'+clickableEn(s.en)+' <button class="btn sec small" onclick="speak(\''+s.en.replace(/'/g,"\\'")+'\',1)">🔊</button>'+
+           '<button class="btn sec small" onclick="speak(\''+s.en.replace(/'/g,"\\'")+'\',0.62)">🐢</button></div>'+
+           '<div class="tr">'+esc(s.zh_tr)+'</div>';
+    }
+    h += '</div>';
+  });
+  if(w.forms) h += '<div class="center" style="margin:6px 0"><span class="tag forms">動詞三態：'+esc(w.forms)+'</span></div>';
+  (w.phrases||[]).forEach(p=>{
+    h += '<div class="extra ph"><b>片語｜'+esc(p.phrase)+'　'+esc(p.zh)+'</b>'+(p.example? '<span>例：'+clickableEn(p.example)+' <button class="btn sec small" onclick="speak(\''+p.example.replace(/'/g,"\\'")+'\',1)">🔊</button></span>':'')+'</div>';
+  });
+  (w.derived||[]).forEach(d=>{
+    h += '<div class="extra dv"><b>延伸字｜'+esc(d.word)+' '+esc(d.pos)+' '+esc(d.zh)+' <button class="btn sec small" onclick="speak(\''+d.word.replace(/'/g,"\\'")+'\',1)">🔊</button></b>'+(d.example? '<span>例：'+clickableEn(d.example)+' <button class="btn sec small" onclick="speak(\''+d.example.replace(/'/g,"\\'")+'\',1)">🔊</button></span>':'')+'</div>';
+  });
+  (w.notes||[]).forEach(n=>{ h += '<div class="extra nt"><b>用法辨析</b>'+esc(n)+'</div>'; });
+  return h;
+}
+function listenCard(){
+  const s = S.session;
+  if(s.idx >= s.words.length){ s.idx=0; s.stage='speak'; save(); return speakIntro(); }
+  const w = byWord[s.words[s.idx]];
+  let h = stageBar('步驟3｜聽發音');
+  h += '<div class="card">';
+  h += '<div class="word-big">'+esc(w.word)+'</div><div class="kk">'+esc(w.kk)+'</div>';
+  h += '<div class="center" style="margin:8px 0">'+
+    '<button class="btn sec" onclick="speak(\''+w.word.replace(/'/g,"\\'")+'\',1)">🔊 單字</button>'+
+    '<button class="btn sec" onclick="speak(\''+w.word.replace(/'/g,"\\'")+'\',0.62)">🐢 慢速</button>'+
+    '<button class="btn sec" onclick="playWordAndSentence()">▶ 重播 字＋例句</button></div>';
+  h += wordDetailHTML(w, true);
+  h += '</div>';
+  h += '<div class="grid2">'+
+    '<button class="btn ghost" onclick="listenNav(-1)" '+(s.idx===0?'disabled':'')+'>‹ 上一個</button>'+
+    '<button class="btn" onclick="listenNav(1)">'+(s.idx===s.words.length-1?'進入口說練習 ›':'下一個 ›')+'</button></div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+  playWordAndSentence();
+}
+function playWordAndSentence(){
+  const w = byWord[S.session.words[S.session.idx]];
+  speakSeq([{t:w.word,rate:1},{t:firstEn(w),rate:1}]);
+}
+function listenNav(d){
+  S.session.idx += d; save();
+  listenCard();
+}
+
+/* ================= step 4: speaking ================= */
+let rec=null, recTarget=null;
+function speakIntro(){
+  let h = '<div class="card center"><div style="font-size:1.25rem;font-weight:800">🎤 步驟4｜口說練習</div>';
+  if(SRClass){
+    h += '<div class="muted" style="margin:10px 0;text-align:left">先聽示範，再按「換我說」對著手機或電腦說出來，我會即時比對。<br><br>💡 第一次會跳出「允許使用麥克風」——同意之後才聽得到你的聲音，只在練習時用，不會錄存。</div>';
+  }else{
+    h += '<div class="banner" style="text-align:left">你的瀏覽器不支援語音辨識（Safari／Firefox 常見），已自動切換成「自我評估模式」：一樣聽示範、自己跟著唸，唸完自己歸類就好。想要自動比對，建議改用 <b>Chrome</b> 開這個網頁。</div>';
+  }
+  h += '<button class="btn big" onclick="speakCard()">開始 ›</button></div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function speakCard(msg){
+  const s = S.session;
+  if(s.idx >= s.words.length){ s.idx=0; s.stage='quiz'; s.quiz=null; save(); return quizCard(); }
+  const w = byWord[s.words[s.idx]];
+  const sen = firstEn(w);
+  let h = stageBar('步驟4｜口說');
+  h += '<div class="card center">';
+  h += '<div class="word-big">'+esc(w.word)+'</div><div class="kk">'+esc(w.kk)+'</div>';
+  h += '<div class="muted">'+esc(zhSummary(w))+'</div>';
+  h += '<div style="margin:10px 0"><span class="muted">示範：</span>'+
+    '<button class="btn sec small" onclick="speak(\''+w.word.replace(/'/g,"\\'")+'\',1)">🔊 單字</button>'+
+    '<button class="btn sec small" onclick="speak(\''+sen.replace(/'/g,"\\'")+'\',1)">🔊 例句</button>'+
+    '<button class="btn sec small" onclick="speak(\''+sen.replace(/'/g,"\\'")+'\',0.62)">🐢 例句慢速</button></div>';
+  h += '<div class="sense" style="text-align:left"><div class="en">'+clickableEn(sen)+'</div><div class="tr">'+esc(w.senses[0].zh_tr)+'</div></div>';
+  if(SRClass){
+    h += '<div style="margin:6px 0"><button class="btn warm" onclick="startRec(\'word\')">🎙️ 換我說：單字</button>'+
+         '<button class="btn warm" onclick="startRec(\'sentence\')">🎙️ 換我說：例句</button></div>';
+    h += '<div class="speech-box" id="srBox">'+(msg||'按上面的「換我說」開始 🎤')+'</div>';
+    h += '<div><button class="btn ghost small" onclick="speakCard()">🔁 再說一次（清空）</button></div>';
+  }else{
+    h += '<div class="banner">自我評估模式：聽完示範自己唸一次，覺得如何自己選 👇</div>';
+  }
+  h += '<div class="muted" style="margin-top:10px">唸完之後，自己歸類：</div>';
+  h += '<div class="grid2" style="margin-top:8px">'+
+    '<button class="btn" onclick="speakSelf(\'ok\')">😄 發音沒問題</button>'+
+    '<button class="btn warm" onclick="speakSelf(\'more\')">📌 還要練（入複習）</button></div>';
+  h += '<button class="btn ghost small" style="margin-top:8px" onclick="speakSelf(null)">略過這個字 ›</button>';
+  h += '</div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function startRec(target){
+  if(!SRClass) return;
+  recTarget = target;
+  const box = document.getElementById('srBox');
+  try{ if(rec) rec.abort(); }catch(e){}
+  rec = new SRClass();
+  rec.lang='en-US'; rec.interimResults=true; rec.maxAlternatives=3;
+  const w = byWord[S.session.words[S.session.idx]];
+  const answer = target==='word'? w.word : firstEn(w);
+  box.innerHTML = '🎙️ <span class="good">聽你說…</span>（請說：<i>'+esc(answer)+'</i>）';
+  rec.onresult = (ev)=>{
+    let txt=''; let final=false;
+    for(const r of ev.results){ txt = r[0].transcript; if(r.isFinal) final=true; }
+    if(!final){ box.innerHTML = '🎙️ '+esc(txt)+' …'; return; }
+    const hits = [];
+    for(const alt of ev.results[ev.results.length-1]) hits.push(alt.transcript);
+    const ok = hits.some(t=>norm(t)===norm(answer)) || (target==='word' && hits.some(t=>norm(t).split(' ').includes(norm(answer))));
+    if(ok){
+      box.innerHTML = '<span class="good">'+pick(CHEERS)+'</span><br>你說的：「'+esc(txt)+'」　✔ 正確！';
+    }else{
+      box.innerHTML = '<span class="bad">'+pick(COMFORT)+'</span><br>你說的：「<span class="bad">'+esc(txt)+'</span>」<br>正解是：「<span class="good">'+esc(answer)+'</span>」<br>'+
+        '<button class="btn sec small" onclick="speak(\''+answer.replace(/'/g,"\\'")+'\',0.62)">🐢 再聽一次示範</button>'+
+        '<button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
+    }
+  };
+  rec.onerror = (e)=>{
+    box.innerHTML = e.error==='not-allowed'
+      ? '<span class="bad">麥克風沒有開啟權限</span>：請點網址列的 🎤 圖示允許使用，或改用自我評估（下面按鈕直接歸類即可）。'
+      : '<span class="bad">沒聽清楚，再試一次？</span> <button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
+  };
+  rec.onend = ()=>{};
+  try{ rec.start(); }catch(e){}
+}
+function speakSelf(k){
+  try{ if(rec) rec.abort(); }catch(e){}
+  const s = S.session, w = s.words[s.idx];
+  if(k==='more' && !S.review.includes(w)) S.review.push(w);
+  s.idx++; save();
+  speakCard();
+}
+
+/* ================= step 5: listening quiz ================= */
+function makeQuiz(words){
+  const scope = scopeWords(S.plan? S.plan.filter : S.filter);
+  const poolWords = (scope.length>=4? scope: ALL).map(w=>w.word);
+  return shuffle(words).map(word=>{
+    const mode = Math.random()<0.5? 'w':'s';
+    const others = shuffle(poolWords.filter(x=>x!==word)).slice(0,3);
+    const opts = shuffle([word].concat(others));
+    return {word, mode, opts, answered:false, correct:null};
+  });
+}
+function quizCard(){
+  const s = S.session;
+  if(!s.quiz){ s.quiz = {items: makeQuiz(s.words), i:0, score:0}; save(); }
+  const q = s.quiz;
+  if(q.i >= q.items.length) return quizDone();
+  const it = q.items[q.i];
+  const w = byWord[it.word];
+  const playText = it.mode==='w'? w.word : firstEn(w);
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="pauseToHome()">‹ 暫停</button><span class="pill">步驟5｜聽力測驗　'+(q.i+1)+' / '+q.items.length+'</span></div>';
+  h += '<div class="pbar"><div style="width:'+Math.round(q.i/q.items.length*100)+'%"></div></div>';
+  h += '<div class="card center"><div class="muted">仔細聽，他唸的是哪一個？</div>'+
+    '<div style="margin:12px 0"><button class="btn" onclick="speak(\''+playText.replace(/'/g,"\\'")+'\',1)">🔊 再播一次</button>'+
+    '<button class="btn sec" onclick="speak(\''+playText.replace(/'/g,"\\'")+'\',0.62)">🐢 慢速</button></div>';
+  h += '<div id="opts" style="text-align:left">';
+  it.opts.forEach((o,idx)=>{
+    const label = it.mode==='w'? o : firstEn(byWord[o]);
+    h += '<button class="opt" id="opt'+idx+'" onclick="quizPick('+idx+')">'+String.fromCharCode(65+idx)+'. '+esc(label)+'</button>';
+  });
+  h += '</div><div id="quizFb"></div></div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+  speak(playText, 1);
+}
+function quizPick(idx){
+  const s = S.session, q = s.quiz, it = q.items[q.i];
+  if(it.answered) return;
+  it.answered = true;
+  const w = byWord[it.word];
+  const correctIdx = it.opts.indexOf(it.word);
+  for(let k=0;k<4;k++){ const b=document.getElementById('opt'+k); b.disabled=true; }
+  document.getElementById('opt'+correctIdx).classList.add('right');
+  const fb = document.getElementById('quizFb');
+  if(idx===correctIdx){
+    q.score++; it.correct=true;
+    fb.innerHTML = '<div class="good" style="margin:8px 0">'+pick(CHEERS)+'　'+esc(it.word)+'｜'+esc(zhSummary(w))+'</div>'+
+      '<div class="grid2"><button class="btn" onclick="quizNext(false)">😄 已掌握，下一題 ›</button>'+
+      '<button class="btn warm" onclick="quizNext(true)">📌 還要複習</button></div>';
+  }else{
+    it.correct=false;
+    document.getElementById('opt'+idx).classList.add('wrong');
+    fb.innerHTML = '<div class="bad" style="margin:8px 0">'+pick(COMFORT)+'　正解：<b>'+esc(it.word)+'</b>｜'+esc(zhSummary(w))+'（已加入複習）</div>'+
+      '<button class="btn big" onclick="quizNext(true)">下一題 ›</button>';
+  }
+  save();
+}
+function quizNext(toReview){
+  const s = S.session, q = s.quiz, it = q.items[q.i];
+  if(toReview && !S.review.includes(it.word)) S.review.push(it.word);
+  if(!toReview && s.isReview){
+    // 複習模式：答對且已掌握 → 從複習清單移除
+    S.review = S.review.filter(x=>x!==it.word);
+  }
+  q.i++; save();
+  quizCard();
+}
+function quizDone(){
+  const s = S.session, q = s.quiz;
+  const pct = Math.round(q.score/q.items.length*100);
+  let h = '<div class="card center"><div style="font-size:1.3rem;font-weight:800">測驗結束 🎯</div>'+
+    '<div class="score-big">'+q.score+' / '+q.items.length+'</div>'+
+    '<div class="muted">'+(pct===100?'全對！超強！🏆':pct>=70?'表現很棒，剩下的交給複習！👏':'沒關係，複習幾輪就會了 🌱')+'</div>';
+  if(s.isReview){
+    S.session=null; save();
+    if(S.review.length){
+      h += '<div style="margin:10px 0">複習清單還剩 <b style="color:var(--accent)">'+S.review.length+'</b> 字</div>'+
+        '<button class="btn big warm" onclick="reviewStart()">🔁 再跑一輪複習</button>';
+    }else{
+      h += '<div style="margin:10px 0" class="good">複習清單清空了！太厲害了 🎉</div>';
+    }
+    h += '<button class="btn ghost" onclick="home()">回首頁</button></div>';
+  }else{
+    if(S.plan){ S.plan.done[s.day-1]=true;
+      const next = S.plan.done.findIndex(x=>!x);
+      if(next>=0) S.plan.cur = next+1;
+    }
+    S.session=null; save();
+    h += '<div style="margin:10px 0">今天這批完成了！✅</div>';
+    if(S.review.length) h += '<button class="btn big warm" onclick="reviewStart()">🔁 順手複習（'+S.review.length+' 字）</button>';
+    h += '<button class="btn big sec" onclick="home()">今天到這裡，回首頁 🎈</button></div>';
+  }
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+
+/* ================= step 6: review ================= */
+function reviewStart(){
+  if(!S.review.length) return home();
+  const words = S.review.filter(w=>byWord[w]);
+  S.session = {words, idx:0, stage:'listen', isReview:true, quiz:null};
+  save();
+  let h = '<div class="card center"><div style="font-size:1.2rem;font-weight:800">🔁 複習時間</div>'+
+    '<div class="muted" style="margin:8px 0">這輪要複習 '+words.length+' 個字：<br><b style="color:var(--accent)">'+words.map(esc).join('、')+'</b><br>流程一樣：聽發音 → 口說 → 聽力測驗。答對並選「已掌握」就會從清單移除。</div>'+
+    '<button class="btn big" onclick="listenCard()">開始 ›</button>'+
+    '<button class="btn ghost small" onclick="dropSession()">先不要，回首頁</button></div>';
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+
+/* ================= exercises (Try It!) ================= */
+function exercisesScreen(tab){
+  tab = tab||'reading';
+  const EX = DATA.exercises;
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">會考題型練習</span></div>';
+  h += '<div class="banner">📌 '+esc(EX.answer_source)+'</div>';
+  h += '<div class="center" style="margin-bottom:10px">'+
+    '<button class="btn '+(tab==='reading'?'':'sec')+'" onclick="exercisesScreen(\'reading\')">A 閱讀測驗</button>'+
+    '<button class="btn '+(tab==='mc'?'':'sec')+'" onclick="exercisesScreen(\'mc\')">B 單字選擇</button></div>';
+  if(tab==='reading'){
+    h += '<div class="card"><b>📖 對話短文</b> <button class="btn sec small" onclick="playDialogue()">🔊 整段朗讀</button><div style="margin-top:8px">';
+    EX.reading.dialogue.forEach(d=>{ h += '<div class="dlg-line"><span class="sp">'+esc(d.speaker)+':</span> '+clickableEn(d.text)+'</div>'; });
+    h += '<div class="muted" style="margin-top:6px">💡 '+esc(EX.reading.note)+'</div></div></div>';
+    h += quizBlock(EX.reading.questions, 'rc');
+  }else{
+    h += quizBlock(EX.mc.questions, 'mc');
+  }
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+let EXA = {};
+function quizBlock(qs, prefix){
+  let h = '';
+  qs.forEach((q,qi)=>{
+    const key = prefix+qi;
+    h += '<div class="card"><b>'+(qi+1)+'. '+esc(q.q)+'</b>';
+    q.options.forEach((o,oi)=>{
+      let cls='opt', dis='';
+      if(EXA[key]!==undefined){
+        dis='disabled';
+        if(oi===q.answer) cls+=' right';
+        else if(oi===EXA[key]) cls+=' wrong';
+      }
+      h += '<button class="'+cls+'" '+dis+' onclick="exAnswer(\''+prefix+'\','+qi+','+oi+')">('+String.fromCharCode(65+oi)+') '+esc(o)+'</button>';
+    });
+    if(EXA[key]!==undefined){
+      h += EXA[key]===q.answer? '<div class="good">✔ 答對了！</div>' : '<div class="bad">✘ 正解是 ('+String.fromCharCode(65+q.answer)+')</div>';
+    }
+    h += '</div>';
+  });
+  const answered = qs.filter((q,qi)=>EXA[prefix+qi]!==undefined).length;
+  const right = qs.filter((q,qi)=>EXA[prefix+qi]===q.answer).length;
+  h += '<div class="card center"><b>已作答 '+answered+' / '+qs.length+'　答對 '+right+'</b><br><button class="btn warm-soft small" onclick="exReset(\''+prefix+'\','+qs.length+')">♻️ 重做這一區</button></div>';
+  return h;
+}
+function exAnswer(prefix, qi, oi){
+  EXA[prefix+qi]=oi;
+  exercisesScreen(prefix==='rc'?'reading':'mc');
+}
+function exReset(prefix, n){
+  for(let i=0;i<n;i++) delete EXA[prefix+i];
+  exercisesScreen(prefix==='rc'?'reading':'mc');
+}
+function playDialogue(){
+  speakSeq(DATA.exercises.reading.dialogue.map(d=>({t:d.text, rate:1})));
+}
+
+/* ================= boot ================= */
+renderChips();
+home();
+</script>
+</body>
+</html>

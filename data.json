@@ -1,0 +1,256 @@
+{
+  "unit": 17,
+  "topic_zh": "金錢",
+  "topic_en": "Money",
+  "book": "國中英語超強字彙 Super 2500",
+  "track": { "basic": "曲目 034", "advanced": "曲目 035" },
+  "basic": [
+    {
+      "no": 1, "word": "borrow", "kk": "[ˋbɑro]",
+      "senses": [
+        { "pos": "v.", "zh": "借入", "en": "I've left my whiteout at home; can I borrow yours?", "zh_tr": "我把立可白留在家裡；可否把你的借給我？", "uncertain": true }
+      ],
+      "phrases": [ { "phrase": "borrow sth from sb", "zh": "從某人那借某物" } ]
+    },
+    {
+      "no": 2, "word": "buy", "kk": "[baɪ]", "forms": "bought－bought",
+      "senses": [
+        { "pos": "v.", "zh": "買", "en": "What did you buy for your girlfriend on Valentine's Day?", "zh_tr": "你在情人節買了什麼給你的女朋友？" }
+      ]
+    },
+    {
+      "no": 3, "word": "cent", "kk": "[sɛnt]",
+      "senses": [
+        { "pos": "n.", "zh": "分錢", "en": "There are a hundred cents in a dollar.", "zh_tr": "一元裡有一百分錢。" }
+      ]
+    },
+    {
+      "no": 4, "word": "change", "kk": "[tʃendʒ]",
+      "senses": [
+        { "pos": "n.", "zh": "零錢", "en": "Here is your change.", "zh_tr": "這裡是你的零錢。" }
+      ]
+    },
+    {
+      "no": 5, "word": "cheap", "kk": "[tʃip]",
+      "senses": [
+        { "pos": "adj.", "zh": "便宜的", "en": "The fur coat is too cheap to be true.", "zh_tr": "這件皮外套太便宜了，可能不是真的。" }
+      ]
+    },
+    {
+      "no": 6, "word": "cost", "kk": "[kɔst]", "forms": "cost－cost",
+      "senses": [
+        { "pos": "v.", "zh": "花費", "en": "The tickets to that circus cost too much, and they sold very poorly.", "zh_tr": "那場馬戲團的票賣得太貴，且銷售得很差。" }
+      ]
+    },
+    {
+      "no": 7, "word": "deal", "kk": "[dil]", "forms": "dealt－dealt",
+      "senses": [
+        { "pos": "v.", "zh": "做買賣；經營", "en": "We have dealt with the fisherman for a long time.", "zh_tr": "我們已經和那漁夫做了很久的生意了。" },
+        { "pos": "v.", "zh": "處理；對付", "en": "It's very difficult for me to deal with all the problems by myself.", "zh_tr": "要獨自處理所有的問題對我而言很困難。" },
+        { "pos": "n.", "zh": "交易；達成協議", "en": "We made a deal with that company to supply cotton for export.", "zh_tr": "我們和那家公司達成協議，由他們供應棉花為出口之用。", "uncertain": true }
+      ]
+    },
+    {
+      "no": 8, "word": "dollar", "kk": "[ˋdɑlɚ]",
+      "senses": [
+        { "pos": "n.", "zh": "元", "en": "The printer cost me two thousand and three hundred dollars.", "zh_tr": "這臺印表機花了我兩千三百元。" }
+      ]
+    },
+    {
+      "no": 9, "word": "expensive", "kk": "[ɪkˋspɛnsɪv]",
+      "senses": [
+        { "pos": "adj.", "zh": "昂貴的", "en": "Traveling by plane is more expensive than by train.", "zh_tr": "搭飛機旅行比搭火車貴多了。" }
+      ]
+    },
+    {
+      "no": 10, "word": "lend", "kk": "[lɛnd]", "forms": "lent－lent",
+      "senses": [
+        { "pos": "v.", "zh": "借出", "en": "Can you lend me some money? = Can you lend some money to me?", "zh_tr": "可以借我一些錢嗎？" }
+      ],
+      "phrases": [ { "phrase": "lend sth to sb", "zh": "把某物借給某人" } ]
+    },
+    {
+      "no": 11, "word": "money", "kk": "[ˋmʌnɪ]",
+      "senses": [
+        { "pos": "n.", "zh": "錢", "en": "The bank loaned me some money to buy the house.", "zh_tr": "銀行貸款給我去買房子。" }
+      ]
+    },
+    {
+      "no": 12, "word": "pay", "kk": "[pe]", "forms": "paid－paid",
+      "senses": [
+        { "pos": "v.", "zh": "付；付款", "en": "When can you pay me back?", "zh_tr": "你何時可以把錢還給我？" }
+      ]
+    },
+    {
+      "no": 13, "word": "price", "kk": "[praɪs]",
+      "senses": [
+        { "pos": "n.", "zh": "價錢", "en": "The price of that purse is too high.", "zh_tr": "那個女用包的價錢很高。" }
+      ],
+      "notes": [ "延伸：價錢只有高低（The price is high/low.）。絕對不可以用 expensive 或 cheap 來形容價錢。" ]
+    },
+    {
+      "no": 14, "word": "prize", "kk": "[praɪz]",
+      "senses": [
+        { "pos": "n.", "zh": "獎（品）", "en": "Everybody wished to win first prize of the lottery.", "zh_tr": "每個人希望能贏得彩券的第一頭獎。" }
+      ],
+      "phrases": [ { "phrase": "hit the jackpot", "zh": "中頭彩（jackpot 指的是可贏得的最大賭注）", "example": "What would you do if you hit the jackpot?" } ]
+    },
+    {
+      "no": 15, "word": "save", "kk": "[sev]",
+      "senses": [
+        { "pos": "v.", "zh": "儲蓄", "en": "We should teach the kids how to save.", "zh_tr": "我們應該教小孩如何儲蓄。" },
+        { "pos": "v.", "zh": "省（錢）；省（時）", "en": "It will save money if you walk to the office instead of taking the bus.", "zh_tr": "如果你走路去上班的話，就可以省下搭公車的錢。" },
+        { "pos": "v.", "zh": "拯救", "en": "The hero finally saved all the villagers in the film.", "zh_tr": "在影片裡，英雄最後拯救了所有的村民。" }
+      ],
+      "derived": [ { "word": "savings", "pos": "n.", "zh": "儲蓄；存款", "example": "I used my savings to buy a new car." } ]
+    },
+    {
+      "no": 16, "word": "sell", "kk": "[sɛl]", "forms": "sold－sold",
+      "senses": [
+        { "pos": "v.", "zh": "賣", "en": "I am willing to sell my house if anyone wants to buy it.", "zh_tr": "我很願意把我的房子賣掉，假如有人要買的話。" }
+      ]
+    },
+    {
+      "no": 17, "word": "spend", "kk": "[spɛnd]", "forms": "spent－spent",
+      "senses": [
+        { "pos": "v.", "zh": "花費", "en": "They spent a lot of time and money building the skyscraper.", "zh_tr": "他們花了很多時間和金錢建造這棟摩天大樓。" }
+      ],
+      "notes": [ "延伸辨析：spend、cost、take 都有「花費」的意思，但用法不太一樣。spend 一定要人當主詞，且除了花錢以外，也可以花時間。至於事物（或虛主詞 it）當主詞的花時間或花錢則要用 take。而 cost 一定要事物（或虛主詞 it）當主詞，且指的只有花錢。例：I spent $100 buying the book. ＝ The book cost me $100 to buy it. ＝ It cost me $100 to buy the book.／I spent one hour reading the novel. ＝ The novel took me one hour to read. ＝ It took me one hour to read the novel." ]
+    }
+  ],
+  "advanced": [
+    {
+      "no": 1, "word": "bill", "kk": "[bɪl]",
+      "senses": [
+        { "pos": "n.", "zh": "帳單", "en": "The bill for electricity is always higher than the bill for water.", "zh_tr": "電費的帳單總是比水費的帳單高多了。" },
+        { "pos": "n.", "zh": "紙鈔", "en": "I only have some big bills. Can you pay for me first?", "zh_tr": "我只有一些大鈔。你可否先幫我付？" },
+        { "pos": "n.", "zh": "法案", "en": "The new education bill will appear next month.", "zh_tr": "新的教育法案將會在下個月施行。" }
+      ]
+    },
+    {
+      "no": 2, "word": "cash", "kk": "[kæʃ]",
+      "senses": [
+        { "pos": "n.", "zh": "現金", "en": "Do you want to pay by cash or credit card?", "zh_tr": "你要付現金還是刷卡？" },
+        { "pos": "v.", "zh": "兌現", "en": "I need to cash a check at the bank later.", "zh_tr": "我待會要去銀行兌現一張支票。" }
+      ],
+      "derived": [ { "word": "cashier", "pos": "n.", "zh": "出納員", "example": "Her job is a cashier who takes and gives out money at that restaurant." } ]
+    },
+    {
+      "no": 3, "word": "charge", "kk": "[tʃɑrdʒ]",
+      "senses": [
+        { "pos": "n.", "zh": "費用", "en": "When you buy the jeans, there should be no charge for alterations.", "zh_tr": "當你買牛仔褲時，修改長度應該是不會收取費用的。" },
+        { "pos": "v.", "zh": "索費", "en": "How much do you charge for a room for the night?", "zh_tr": "這個晚上一間房要收費多少錢？" }
+      ],
+      "phrases": [ { "phrase": "to be in charge of ＝ to take care of", "zh": "照顧", "example": "I was in charge of my younger brother when my parents were away." } ]
+    },
+    {
+      "no": 4, "word": "coin", "kk": "[kɔɪn]",
+      "senses": [
+        { "pos": "n.", "zh": "硬幣", "en": "The couple threw a coin into the pond to make a wish.", "zh_tr": "這對情侶把硬幣丟到池塘裡許願。" }
+      ]
+    },
+    {
+      "no": 5, "word": "credit card", "kk": "[ˋkrɛdɪt ˏkɑrd]",
+      "senses": [
+        { "pos": "n.", "zh": "信用卡", "en": "How many credit cards do you have?", "zh_tr": "你有幾張信用卡？" }
+      ],
+      "derived": [ { "word": "credit", "pos": "n.", "zh": "信用", "example": "The old man's credit is very good." } ]
+    },
+    {
+      "no": 6, "word": "currency", "kk": "[ˋkɝənsɪ]",
+      "senses": [
+        { "pos": "n.", "zh": "貨幣", "en": "The American teachers in China are paid in local currency.", "zh_tr": "在中國，美國教師的工資是用中國貨幣所支付。" }
+      ]
+    },
+    {
+      "no": 7, "word": "debt", "kk": "[dɛt]",
+      "senses": [
+        { "pos": "n.", "zh": "債務", "en": "The company was in debt to me. = The company owed me money.", "zh_tr": "這家公司欠我錢。" }
+      ],
+      "phrases": [ { "phrase": "in debt／out of debt", "zh": "負債／付清帳款", "example": "She was in debt to me when she still studied, but she has been out of debt since she made some money." } ]
+    },
+    {
+      "no": 8, "word": "earn", "kk": "[ɝn]",
+      "senses": [
+        { "pos": "v.", "zh": "賺（錢）", "en": "In order to earn more money, he found another job in the evening.", "zh_tr": "為了要賺更多錢，他在晚上找了另一份工作。" }
+      ]
+    },
+    {
+      "no": 9, "word": "fee", "kk": "[fi]",
+      "senses": [
+        { "pos": "n.", "zh": "費用", "en": "The insurance company paid all her medical fees when she was ill in the hospital.", "zh_tr": "這家保險公司付了她生病住院時所有的醫療費用。" }
+      ]
+    },
+    {
+      "no": 10, "word": "fine", "kk": "[faɪn]",
+      "senses": [
+        { "pos": "n.", "zh": "罰金", "en": "He had to pay a NT$3,000 fine because he ran through the traffic light.", "zh_tr": "他必須要繳付新臺幣三千元的罰金，因他闖紅燈。" },
+        { "pos": "v.", "zh": "處以罰金", "en": "He was fined NT$3,000.", "zh_tr": "他被罰款三千元。" }
+      ]
+    },
+    {
+      "no": 11, "word": "income", "kk": "[ˋɪnˏkʌm]",
+      "senses": [
+        { "pos": "n.", "zh": "薪水", "en": "The banker was not satisfied with her income and decided to quit.", "zh_tr": "這位銀行家不滿意她的薪水，並且決定要辭職。" }
+      ]
+    },
+    {
+      "no": 12, "word": "loss", "kk": "[lɔs]",
+      "senses": [
+        { "pos": "n.", "zh": "虧損", "en": "His company had big losses last year.", "zh_tr": "他的公司去年出現巨額虧損。" },
+        { "pos": "n.", "zh": "遺失；損失", "en": "Have you reported the loss of your car to the police?", "zh_tr": "你已向警方報失車子了嗎？" }
+      ]
+    }
+  ],
+  "exercises": {
+    "answer_source": "照片頁角未拍到官方答案，以下答案為 AI 解題結果（皆為高把握度題目）",
+    "reading": {
+      "title": "Reading Comprehension",
+      "dialogue": [
+        { "speaker": "Tina", "text": "What happened?" },
+        { "speaker": "Terry", "text": "I lost my wallet." },
+        { "speaker": "Tina", "text": "Did you feel anyone steal your wallet?" },
+        { "speaker": "Terry", "text": "No, I didn't." },
+        { "speaker": "Tina", "text": "How much was in your wallet?" },
+        { "speaker": "Terry", "text": "I had NT$5,000 before I bought the purse for my girlfriend." },
+        { "speaker": "Tina", "text": "How much did it cost you?" },
+        { "speaker": "Terry", "text": "It cost only NT$100." },
+        { "speaker": "Tina", "text": "That's too bad! So you really lost a lot." },
+        { "speaker": "Terry", "text": "You're right. Besides, all of my cards were lost, including the identification card, the national health insurance card, and three credit cards." },
+        { "speaker": "Tina", "text": "Did you call the police?" },
+        { "speaker": "Terry", "text": "Yes, I did." },
+        { "speaker": "Tina", "text": "Don't worry. Maybe the police will give you good news in a few days." },
+        { "speaker": "Terry", "text": "I hope so." }
+      ],
+      "note": "national health insurance card 全民健保卡",
+      "questions": [
+        { "q": "What did Terry buy for his girlfriend?", "options": ["A wallet.", "A purse.", "A ring.", "Nothing."], "answer": 1 },
+        { "q": "How much money did Terry lose?", "options": ["NT$5,000.", "NT$4,900.", "NT$100.", "NT$5,100."], "answer": 1 },
+        { "q": "How many cards did Terry lose?", "options": ["Two.", "Three.", "Four.", "Five."], "answer": 3 },
+        { "q": "How did Terry lose his wallet?", "options": ["Someone stole it.", "He didn't know.", "He gave it to his girlfriend.", "He threw it to the trash can."], "answer": 1 }
+      ]
+    },
+    "mc": {
+      "title": "Multiple Choice",
+      "questions": [
+        { "q": "It ________ me one month to visit the USA.", "options": ["cost", "spend", "took", "spent"], "answer": 2 },
+        { "q": "It ________ Tim NT$30,000 to go to England last month.", "options": ["cost", "spend", "take", "spent"], "answer": 0 },
+        { "q": "I ________ two hundred dollars buying the coat last night.", "options": ["cost", "spend", "take", "spent"], "answer": 3 },
+        { "q": "They ________ me NT$2,000 for a double room for a night.", "options": ["cost", "charged", "paid", "spent"], "answer": 1 },
+        { "q": "I ________ five books from the library for my summer vacation last night.", "options": ["lent", "lend", "borrow", "borrowed"], "answer": 3 },
+        { "q": "Would you please ________ me your scooter?", "options": ["lent", "lend", "borrow", "borrowed"], "answer": 1 },
+        { "q": "He is heavily in ________ because he likes gambling.（gambling 賭博）", "options": ["income", "change", "fee", "debt"], "answer": 3 },
+        { "q": "The waitress wasn't satisfied with her ________ and quit her job last month.", "options": ["deal", "income", "charge", "price"], "answer": 1 },
+        { "q": "He forgot to pay the phone ________, so he can't make a call now.", "options": ["bill", "cash", "coin", "price"], "answer": 0 },
+        { "q": "The writer ________ NT$1,000,000 a month by writing some novels.", "options": ["lends", "charges", "earns", "borrows"], "answer": 2 },
+        { "q": "I don't mind ________ to have my cellphone fixed.", "options": ["lending", "paying", "borrowing", "earning"], "answer": 1 },
+        { "q": "The driver was ________ NT$12,000 because he was driving drunk.", "options": ["dealt", "lent", "fined", "paid"], "answer": 2 },
+        { "q": "What is the ________ of this diamond ring? It must be very high.", "options": ["price", "income", "cash", "fee"], "answer": 0 },
+        { "q": "The man only receives low ________ because he doesn't have a good educational background.", "options": ["change", "bill", "debt", "income"], "answer": 3 },
+        { "q": "It'll ________ some time if we take a taxi instead of walking.", "options": ["save", "spend", "take", "cost"], "answer": 0 },
+        { "q": "The student is so independent that he is able to ________ with the problems by himself.", "options": ["decide", "charge", "deal", "cancel"], "answer": 2 },
+        { "q": "Vicky: How much do you have in ________?  Tim: I only have big bills.", "options": ["debt", "change", "price", "cash"], "answer": 3 }
+      ]
+    }
+  }
+}
