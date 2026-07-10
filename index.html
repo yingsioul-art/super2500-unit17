@@ -185,6 +185,7 @@ function home(){
   h += menuItem('🗓️','步驟1.5｜分天計畫','決定分幾天學，自動配好每天份量', clsDone? 'planScreen()':null, clsDone? '' :'先完成分類測驗');
   h += menuItem('📖','今日練習（步驟2→5）', S.plan? '第 '+S.plan.cur+' 天：聽發音 → 口說 → 聽力測驗' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
   h += menuItem('🔁','步驟6｜複習', S.review.length? '複習清單有 '+S.review.length+' 個字等著你':'目前沒有要複習的字，讚！', S.review.length? 'reviewStart()':null, S.review.length?'':'');
+  h += menuItem('📚','單字總表','基礎 17 字＋進階 12 字全部列出（不受篩選影響），點字展開細節','wordListScreen()');
   h += menuItem('📝','選配｜會考題型練習','課本 Try It!：閱讀測驗 4 題＋單字選擇 17 題','exercisesScreen()');
   h += '<div class="center muted" style="margin-top:18px">🔊 點單字或例句裡的字都能聽發音 · 進度自動儲存</div>';
   app.innerHTML = h;
@@ -457,28 +458,41 @@ function startRec(target){
   const w = byWord[S.session.words[S.session.idx]];
   const answer = target==='word'? w.word : firstEn(w);
   box.innerHTML = '🎙️ <span class="good">聽你說…</span>（請說：<i>'+esc(answer)+'</i>）';
+  let gotFinal = false;
+  const retryBtn = '<button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
   rec.onresult = (ev)=>{
-    let txt=''; let final=false;
-    for(const r of ev.results){ txt = r[0].transcript; if(r.isFinal) final=true; }
+    let txt=''; let final=false; let last=null;
+    for(let i=0;i<ev.results.length;i++){ const r=ev.results[i]; last=r; txt=r[0].transcript; if(r.isFinal) final=true; }
     if(!final){ box.innerHTML = '🎙️ '+esc(txt)+' …'; return; }
+    gotFinal = true;
     const hits = [];
-    for(const alt of ev.results[ev.results.length-1]) hits.push(alt.transcript);
+    for(let i=0;i<last.length;i++){ if(last[i] && last[i].transcript) hits.push(last[i].transcript); }
     const ok = hits.some(t=>norm(t)===norm(answer)) || (target==='word' && hits.some(t=>norm(t).split(' ').includes(norm(answer))));
     if(ok){
       box.innerHTML = '<span class="good">'+pick(CHEERS)+'</span><br>你說的：「'+esc(txt)+'」　✔ 正確！';
     }else{
       box.innerHTML = '<span class="bad">'+pick(COMFORT)+'</span><br>你說的：「<span class="bad">'+esc(txt)+'</span>」<br>正解是：「<span class="good">'+esc(answer)+'</span>」<br>'+
-        '<button class="btn sec small" onclick="speak(\''+answer.replace(/'/g,"\\'")+'\',0.62)">🐢 再聽一次示範</button>'+
-        '<button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
+        '<button class="btn sec small" onclick="speak(\''+answer.replace(/'/g,"\\'")+'\',0.62)">🐢 再聽一次示範</button>'+retryBtn;
     }
   };
   rec.onerror = (e)=>{
-    box.innerHTML = e.error==='not-allowed'
-      ? '<span class="bad">麥克風沒有開啟權限</span>：請點網址列的 🎤 圖示允許使用，或改用自我評估（下面按鈕直接歸類即可）。'
-      : '<span class="bad">沒聽清楚，再試一次？</span> <button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
+    gotFinal = true; // 避免 onend 再覆蓋訊息
+    if(e.error==='not-allowed' || e.error==='service-not-allowed'){
+      box.innerHTML = '<span class="bad">麥克風沒有開啟權限</span>：請點網址列的 🎤 或 🔒 圖示允許使用麥克風。'+
+        (location.protocol==='file:'? '<br>💡 從電腦直接雙擊開啟（file://）時，Chrome 常不給麥克風權限——請改開線上版網址，口說辨識就會正常。':'')+
+        '<br>也可以直接自我評估：自己唸一次，用下面按鈕歸類即可。';
+    }else if(e.error==='no-speech'){
+      box.innerHTML = '<span class="bad">沒有聽到聲音</span>，再靠近麥克風一點試試？ '+retryBtn;
+    }else if(e.error==='network'){
+      box.innerHTML = '<span class="bad">語音服務連不上（需要網路）</span>，等網路穩定再試。 '+retryBtn;
+    }else{
+      box.innerHTML = '<span class="bad">沒聽清楚，再試一次？</span> '+retryBtn;
+    }
   };
-  rec.onend = ()=>{};
-  try{ rec.start(); }catch(e){}
+  rec.onend = ()=>{
+    if(!gotFinal) box.innerHTML = '<span class="bad">沒有收到辨識結果</span>，再試一次？ '+retryBtn;
+  };
+  try{ rec.start(); }catch(e){ box.innerHTML = '<span class="bad">啟動失敗</span>，再按一次試試。 '+retryBtn; }
 }
 function speakSelf(k){
   try{ if(rec) rec.abort(); }catch(e){}
@@ -592,6 +606,32 @@ function reviewStart(){
     '<button class="btn big" onclick="listenCard()">開始 ›</button>'+
     '<button class="btn ghost small" onclick="dropSession()">先不要，回首頁</button></div>';
   app.innerHTML = h; window.scrollTo(0,0);
+}
+
+/* ================= word list (全字一覽) ================= */
+function wordListScreen(){
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">📚 單字總表</span></div>';
+  h += '<div class="banner">兩篇全部列出，不受頁首篩選影響。點單字列展開課本細節，🔊 聽發音。</div>';
+  [['basic','基礎學習篇（會考必備單字）'],['advanced','進階學習篇（英檢必備單字）']].forEach(sec=>{
+    const list = DATA[sec[0]];
+    h += '<div class="card"><b>'+sec[1]+'｜共 '+list.length+' 字</b>';
+    list.forEach(w=>{
+      const id = 'wl_'+sec[0]+'_'+w.no;
+      const cls = S.cls[w.word];
+      h += '<div class="day-row" style="cursor:pointer" onclick="toggleWL(\''+id+'\')">'+
+        '<span><b>'+w.no+'. '+esc(w.word)+'</b> <span class="muted">'+esc(w.kk)+'</span> '+
+        '<button class="btn sec small" onclick="event.stopPropagation();speak(\''+w.word.replace(/'/g,"\\'")+'\',1)">🔊</button>'+
+        '<br><span class="muted" style="font-size:.85rem">'+esc(zhSummary(w))+'</span></span>'+
+        '<span class="pill">'+(cls==='fam'?'😊 熟':cls==='unfam'?'🤔 不熟':'未分類')+'</span></div>';
+      h += '<div id="'+id+'" style="display:none;padding:4px 0 10px">'+wordDetailHTML(byWord[w.word], true)+'</div>';
+    });
+    h += '</div>';
+  });
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function toggleWL(id){
+  const el = document.getElementById(id);
+  el.style.display = (el.style.display==='none')? 'block':'none';
 }
 
 /* ================= exercises (Try It!) ================= */
