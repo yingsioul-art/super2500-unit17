@@ -203,7 +203,7 @@
     }
   ],
   "exercises": {
-    "answer_source": "照片頁角未拍到官方答案，以下答案為 AI 解題結果（皆為高把握度題目）",
+    "answer_source": "答案已依課本解答頁核對（2026-07-10）",
     "reading": {
       "title": "Reading Comprehension",
       "dialogue": [
@@ -249,7 +249,7 @@
         { "q": "The man only receives low ________ because he doesn't have a good educational background.", "options": ["change", "bill", "debt", "income"], "answer": 3 },
         { "q": "It'll ________ some time if we take a taxi instead of walking.", "options": ["save", "spend", "take", "cost"], "answer": 0 },
         { "q": "The student is so independent that he is able to ________ with the problems by himself.", "options": ["decide", "charge", "deal", "cancel"], "answer": 2 },
-        { "q": "Vicky: How much do you have in ________?  Tim: I only have big bills.", "options": ["debt", "change", "price", "cash"], "answer": 3 }
+        { "q": "Vicky: How much do you have in ________?  Tim: I only have big bills.", "options": ["debt", "change", "price", "cash"], "answer": 1 }
       ]
     }
   }
