@@ -452,19 +452,28 @@ function startRec(target){
   if(!SRClass) return;
   recTarget = target;
   const box = document.getElementById('srBox');
+  speechSynthesis.cancel(); // 停掉還在播的示範音，避免搶麥克風
   try{ if(rec) rec.abort(); }catch(e){}
   rec = new SRClass();
   rec.lang='en-US'; rec.interimResults=true; rec.maxAlternatives=3;
   const w = byWord[S.session.words[S.session.idx]];
   const answer = target==='word'? w.word : firstEn(w);
-  box.innerHTML = '🎙️ <span class="good">聽你說…</span>（請說：<i>'+esc(answer)+'</i>）';
+  box.innerHTML = '⏳ 正在開啟麥克風…（第一次會請你按「允許」）';
   let gotFinal = false;
   const retryBtn = '<button class="btn warm-soft small" onclick="startRec(\''+target+'\')">🎙️ 再說一次</button>';
+  const wd = setTimeout(()=>{ // 看門狗：太久沒結果就中止，不讓畫面卡死
+    if(gotFinal) return;
+    gotFinal = true;
+    try{ rec.abort(); }catch(e){}
+    box.innerHTML = '<span class="bad">等不到辨識結果</span>——可能是麥克風權限還沒按「允許」，或語音服務沒回應。'+
+      '<br>可以再試，或直接自己唸一次、用下面按鈕歸類。 '+retryBtn;
+  }, 12000);
+  rec.onstart = ()=>{ if(!gotFinal) box.innerHTML = '🎙️ <span class="good">麥克風開了，說吧！</span>（請說：<i>'+esc(answer)+'</i>）'; };
   rec.onresult = (ev)=>{
     let txt=''; let final=false; let last=null;
     for(let i=0;i<ev.results.length;i++){ const r=ev.results[i]; last=r; txt=r[0].transcript; if(r.isFinal) final=true; }
     if(!final){ box.innerHTML = '🎙️ '+esc(txt)+' …'; return; }
-    gotFinal = true;
+    gotFinal = true; clearTimeout(wd);
     const hits = [];
     for(let i=0;i<last.length;i++){ if(last[i] && last[i].transcript) hits.push(last[i].transcript); }
     const ok = hits.some(t=>norm(t)===norm(answer)) || (target==='word' && hits.some(t=>norm(t).split(' ').includes(norm(answer))));
@@ -476,7 +485,8 @@ function startRec(target){
     }
   };
   rec.onerror = (e)=>{
-    gotFinal = true; // 避免 onend 再覆蓋訊息
+    if(gotFinal) return;
+    gotFinal = true; clearTimeout(wd); // 避免 onend/看門狗再覆蓋訊息
     if(e.error==='not-allowed' || e.error==='service-not-allowed'){
       box.innerHTML = '<span class="bad">麥克風沒有開啟權限</span>：請點網址列的 🎤 或 🔒 圖示允許使用麥克風。'+
         (location.protocol==='file:'? '<br>💡 從電腦直接雙擊開啟（file://）時，Chrome 常不給麥克風權限——請改開線上版網址，口說辨識就會正常。':'')+
@@ -490,9 +500,9 @@ function startRec(target){
     }
   };
   rec.onend = ()=>{
-    if(!gotFinal) box.innerHTML = '<span class="bad">沒有收到辨識結果</span>，再試一次？ '+retryBtn;
+    if(!gotFinal){ gotFinal=true; clearTimeout(wd); box.innerHTML = '<span class="bad">沒有收到辨識結果</span>，再試一次？ '+retryBtn; }
   };
-  try{ rec.start(); }catch(e){ box.innerHTML = '<span class="bad">啟動失敗</span>，再按一次試試。 '+retryBtn; }
+  try{ rec.start(); }catch(e){ gotFinal=true; clearTimeout(wd); box.innerHTML = '<span class="bad">啟動失敗</span>，再按一次試試。 '+retryBtn; }
 }
 function speakSelf(k){
   try{ if(rec) rec.abort(); }catch(e){}
