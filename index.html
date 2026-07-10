@@ -232,6 +232,7 @@ function classifyCard(revealed, chosen){
   }
   h += '</div>';
   app.innerHTML = h; window.scrollTo(0,0);
+  if(!revealed) speak(w.word, 1);
 }
 function clsPick(k){
   S.cls[C.pool[C.i]] = k; save();
