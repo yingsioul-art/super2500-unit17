@@ -183,7 +183,7 @@ function home(){
     (S.review.length? '　·　複習清單 '+S.review.length+' 字':'')+'</div></div>';
   h += menuItem('1️⃣','步驟1｜分類測驗','看英文單字，分成「熟悉／不熟悉」兩堆','startClassify()');
   h += menuItem('🗓️','步驟1.5｜分天計畫','決定分幾天學，自動配好每天份量', clsDone? 'planScreen()':null, clsDone? '' :'先完成分類測驗');
-  h += menuItem('📖','今日練習（步驟2→5）', S.plan? '第 '+S.plan.cur+' 天：聽發音 → 口說 → 聽力測驗' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
+  h += menuItem('📖','今日練習', S.plan? '第 '+S.plan.cur+' 天：認識單字／發音／聽力測驗，自由選' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
   h += menuItem('🔁','步驟6｜複習', S.review.length? '複習清單有 '+S.review.length+' 個字等著你':'目前沒有要複習的字，讚！', S.review.length? 'reviewStart()':null, S.review.length?'':'');
   h += menuItem('📚','單字總表','基礎 17 字＋進階 12 字全部列出（不受篩選影響），點字展開細節','wordListScreen()');
   h += menuItem('📝','選配｜會考題型練習','課本 Try It!：閱讀測驗 4 題＋單字選擇 17 題','exercisesScreen()');
@@ -337,16 +337,39 @@ function beginSession(order){
   const p = S.plan, batch = p.batches[p.cur-1].filter(w=>byWord[w]);
   const u = batch.filter(w=>S.cls[w]!=='fam'), f = batch.filter(w=>S.cls[w]==='fam');
   const words = order==='famFirst' ? f.concat(u) : u.concat(f);
-  S.session = {words, idx:0, stage:'listen', isReview:false, day:p.cur, quiz:null};
-  save(); listenCard();
+  S.session = {words, idx:0, stage:'hub', isReview:false, day:p.cur, quiz:null, doneParts:{}};
+  save(); sessionHub();
 }
 function resumeSession(){
   const st = S.session.stage;
   if(st==='listen') listenCard();
   else if(st==='speak') speakCard();
   else if(st==='quiz') quizCard();
+  else sessionHub();
 }
 function dropSession(){ S.session=null; save(); home(); }
+
+/* ============ 今日選單：三種練習自由選 ============ */
+function sessionHub(){
+  const s = S.session;
+  s.stage='hub'; save();
+  const d = s.doneParts || (s.doneParts = {});
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="pauseToHome()">‹ 回首頁</button>'+
+    '<span class="pill">'+(s.isReview? '🔁 複習選單' : '第 '+s.day+' 天｜今日選單')+'</span></div>';
+  h += '<div class="card center"><b>這批共 '+s.words.length+' 個字</b><br>'+
+    '<span class="muted">'+s.words.map(w=>S.cls[w]!=='fam'?'<b style="color:var(--accent)">'+esc(w)+'</b>':esc(w)).join('、')+'</span>'+
+    '<div class="muted" style="margin-top:8px">想先練哪個都可以，各項可重複進入 🙂</div></div>';
+  h += menuItem('🎧','認識單字'+(d.listen?'　✅':''),'聽發音＋詞義例句，一字一卡慢慢看','hubEnter(\'listen\')');
+  h += menuItem('🎤','發音練習'+(d.speak?'　✅':''),'聽示範、換你說，自我歸類','hubEnter(\'speak\')');
+  h += menuItem('🎯','聽力測驗'+(d.quiz?'　✅':''),'四選一測驗'+(s.isReview?'（答對＋已掌握就從複習清單移除）':'（完成即算完成今天）'),'hubEnter(\'quiz\')');
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function hubEnter(part){
+  const s = S.session; s.idx = 0;
+  if(part==='listen'){ s.stage='listen'; save(); listenCard(); }
+  else if(part==='speak'){ s.stage='speak'; save(); speakIntro(); }
+  else { s.stage='quiz'; s.quiz=null; save(); quizCard(); }
+}
 
 /* ================= step 3: listen round ================= */
 function stageBar(label){
@@ -380,9 +403,9 @@ function wordDetailHTML(w, withEn){
 }
 function listenCard(){
   const s = S.session;
-  if(s.idx >= s.words.length){ s.idx=0; s.stage='speak'; save(); return speakIntro(); }
+  if(s.idx >= s.words.length){ s.idx=0; (s.doneParts=s.doneParts||{}).listen=true; save(); return sessionHub(); }
   const w = byWord[s.words[s.idx]];
-  let h = stageBar('步驟3｜聽發音');
+  let h = stageBar('🎧 認識單字');
   h += '<div class="card">';
   h += '<div class="word-big">'+esc(w.word)+'</div><div class="kk">'+esc(w.kk)+'</div>';
   h += '<div class="center" style="margin:8px 0">'+
@@ -393,7 +416,7 @@ function listenCard(){
   h += '</div>';
   h += '<div class="grid2">'+
     '<button class="btn ghost" onclick="listenNav(-1)" '+(s.idx===0?'disabled':'')+'>‹ 上一個</button>'+
-    '<button class="btn" onclick="listenNav(1)">'+(s.idx===s.words.length-1?'進入口說練習 ›':'下一個 ›')+'</button></div>';
+    '<button class="btn" onclick="listenNav(1)">'+(s.idx===s.words.length-1?'完成，回今日選單 ›':'下一個 ›')+'</button></div>';
   app.innerHTML = h; window.scrollTo(0,0);
   playWordAndSentence();
 }
@@ -420,10 +443,10 @@ function speakIntro(){
 }
 function speakCard(msg){
   const s = S.session;
-  if(s.idx >= s.words.length){ s.idx=0; s.stage='quiz'; s.quiz=null; save(); return quizCard(); }
+  if(s.idx >= s.words.length){ s.idx=0; (s.doneParts=s.doneParts||{}).speak=true; save(); return sessionHub(); }
   const w = byWord[s.words[s.idx]];
   const sen = firstEn(w);
-  let h = stageBar('步驟4｜口說');
+  let h = stageBar('🎤 發音練習');
   h += '<div class="card center">';
   h += '<div class="word-big">'+esc(w.word)+'</div><div class="kk">'+esc(w.kk)+'</div>';
   h += '<div class="muted">'+esc(zhSummary(w))+'</div>';
@@ -597,10 +620,11 @@ function quizDone(){
       const next = S.plan.done.findIndex(x=>!x);
       if(next>=0) S.plan.cur = next+1;
     }
-    S.session=null; save();
+    (s.doneParts=s.doneParts||{}).quiz=true; s.stage='hub'; save();
     h += '<div style="margin:10px 0">今天這批完成了！✅</div>';
     if(S.review.length) h += '<button class="btn big warm" onclick="reviewStart()">🔁 順手複習（'+S.review.length+' 字）</button>';
-    h += '<button class="btn big sec" onclick="home()">今天到這裡，回首頁 🎈</button></div>';
+    h += '<button class="btn big sec" onclick="sessionHub()">回今日選單，再練其他項目 ›</button>';
+    h += '<button class="btn ghost" onclick="dropSession()">今天到這裡，回首頁 🎈</button></div>';
   }
   app.innerHTML = h; window.scrollTo(0,0);
 }
@@ -609,11 +633,11 @@ function quizDone(){
 function reviewStart(){
   if(!S.review.length) return home();
   const words = S.review.filter(w=>byWord[w]);
-  S.session = {words, idx:0, stage:'listen', isReview:true, quiz:null};
+  S.session = {words, idx:0, stage:'hub', isReview:true, quiz:null, doneParts:{}};
   save();
   let h = '<div class="card center"><div style="font-size:1.2rem;font-weight:800">🔁 複習時間</div>'+
-    '<div class="muted" style="margin:8px 0">這輪要複習 '+words.length+' 個字：<br><b style="color:var(--accent)">'+words.map(esc).join('、')+'</b><br>流程一樣：聽發音 → 口說 → 聽力測驗。答對並選「已掌握」就會從清單移除。</div>'+
-    '<button class="btn big" onclick="listenCard()">開始 ›</button>'+
+    '<div class="muted" style="margin:8px 0">這輪要複習 '+words.length+' 個字：<br><b style="color:var(--accent)">'+words.map(esc).join('、')+'</b><br>認識單字／發音／聽力測驗自由選；測驗答對並選「已掌握」就會從清單移除。</div>'+
+    '<button class="btn big" onclick="sessionHub()">開始 ›</button>'+
     '<button class="btn ghost small" onclick="dropSession()">先不要，回首頁</button></div>';
   app.innerHTML = h; window.scrollTo(0,0);
 }
