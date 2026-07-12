@@ -71,6 +71,9 @@ input[type=number]{font-size:1.3rem;padding:10px;width:110px;border:1.5px solid 
 .dlg-line{margin:6px 0;font-size:1rem;font-family:Georgia,serif}
 .dlg-line .sp{font-weight:700;color:var(--main);font-family:inherit}
 .topnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ref-tb{border-collapse:collapse;width:100%;font-size:.95rem}
+.ref-tb th{background:var(--main-soft);color:var(--main);padding:6px 8px;border:1px solid var(--line);white-space:nowrap}
+.ref-tb td{padding:5px 8px;border:1px solid var(--line);text-align:center}
 .score-big{font-size:2.6rem;font-weight:800;color:var(--main);text-align:center}
 .grid2{display:flex;gap:10px}
 .grid2 .btn{flex:1;margin:0}
@@ -183,10 +186,11 @@ function home(){
     (S.review.length? '　·　複習清單 '+S.review.length+' 字':'')+'</div></div>';
   h += menuItem('1️⃣','步驟1｜分類測驗','看英文單字，分成「熟悉／不熟悉」兩堆','startClassify()');
   h += menuItem('🗓️','步驟1.5｜分天計畫','決定分幾天學，自動配好每天份量', clsDone? 'planScreen()':null, clsDone? '' :'先完成分類測驗');
-  h += menuItem('📖','今日練習', S.plan? '第 '+S.plan.cur+' 天：認識單字／發音／聽力測驗，自由選' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
+  h += menuItem('📖','今日練習', S.plan? '第 '+S.plan.cur+' 天：認識單字／聽力測驗，發音為選配' : '先建立分天計畫', S.plan? 'dailyStart()':null, S.plan?'':'先建立分天計畫');
   h += menuItem('🔁','步驟6｜複習', S.review.length? '複習清單有 '+S.review.length+' 個字等著你':'目前沒有要複習的字，讚！', S.review.length? 'reviewStart()':null, S.review.length?'':'');
-  h += menuItem('📚','單字總表','基礎 17 字＋進階 12 字全部列出（不受篩選影響），點字展開細節','wordListScreen()');
-  h += menuItem('📝','選配｜會考題型練習','課本 Try It!：閱讀測驗 4 題＋單字選擇 17 題','exercisesScreen()');
+  h += menuItem('📚','單字總表','基礎 '+DATA.basic.length+' 字＋進階 '+DATA.advanced.length+' 字全部列出（不受篩選影響），點字展開細節','wordListScreen()');
+  if(DATA.reference) h += menuItem('🔢',DATA.reference.title,DATA.reference.menu_desc||'課本參考表格與用法整理，點英文可聽發音','referenceScreen()');
+  h += menuItem('📝','選配｜會考題型練習','課本 Try It!：'+exSections().map(s=>s[1]+' '+DATA.exercises[s[0]].questions.length+' 題').join('＋'),'exercisesScreen()');
   h += '<div class="center muted" style="margin-top:18px">🔊 點單字或例句裡的字都能聽發音 · 進度自動儲存</div>';
   app.innerHTML = h;
   window.scrollTo(0,0);
@@ -360,7 +364,7 @@ function sessionHub(){
     '<span class="muted">'+s.words.map(w=>S.cls[w]!=='fam'?'<b style="color:var(--accent)">'+esc(w)+'</b>':esc(w)).join('、')+'</span>'+
     '<div class="muted" style="margin-top:8px">想先練哪個都可以，各項可重複進入 🙂</div></div>';
   h += menuItem('🎧','認識單字'+(d.listen?'　✅':''),'聽發音＋詞義例句，一字一卡慢慢看','hubEnter(\'listen\')');
-  h += menuItem('🎤','發音練習'+(d.speak?'　✅':''),'聽示範、換你說，自我歸類','hubEnter(\'speak\')');
+  h += menuItem('🎤','發音練習（選配）'+(d.speak?'　✅':''),'聽示範、換你說，自我歸類；不想練口說可直接跳過，不影響完成','hubEnter(\'speak\')');
   h += menuItem('🎯','聽力測驗'+(d.quiz?'　✅':''),'四選一測驗'+(s.isReview?'（答對＋已掌握就從複習清單移除）':'（完成即算完成今天）'),'hubEnter(\'quiz\')');
   app.innerHTML = h; window.scrollTo(0,0);
 }
@@ -636,7 +640,7 @@ function reviewStart(){
   S.session = {words, idx:0, stage:'hub', isReview:true, quiz:null, doneParts:{}};
   save();
   let h = '<div class="card center"><div style="font-size:1.2rem;font-weight:800">🔁 複習時間</div>'+
-    '<div class="muted" style="margin:8px 0">這輪要複習 '+words.length+' 個字：<br><b style="color:var(--accent)">'+words.map(esc).join('、')+'</b><br>認識單字／發音／聽力測驗自由選；測驗答對並選「已掌握」就會從清單移除。</div>'+
+    '<div class="muted" style="margin:8px 0">這輪要複習 '+words.length+' 個字：<br><b style="color:var(--accent)">'+words.map(esc).join('、')+'</b><br>認識單字／聽力測驗自由選（發音為選配）；測驗答對並選「已掌握」就會從清單移除。</div>'+
     '<button class="btn big" onclick="sessionHub()">開始 ›</button>'+
     '<button class="btn ghost small" onclick="dropSession()">先不要，回首頁</button></div>';
   app.innerHTML = h; window.scrollTo(0,0);
@@ -669,23 +673,37 @@ function toggleWL(id){
 }
 
 /* ================= exercises (Try It!) ================= */
+function exSections(){
+  const EX = DATA.exercises, secs = [['reading','閱讀測驗']];
+  if(EX.mc && EX.mc.questions && EX.mc.questions.length) secs.push(['mc','單字選擇']);
+  if(EX.cloze && EX.cloze.questions && EX.cloze.questions.length) secs.push(['cloze','克漏字']);
+  return secs;
+}
 function exercisesScreen(tab){
   tab = tab||'reading';
   const EX = DATA.exercises;
   let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">會考題型練習</span></div>';
   h += '<div class="banner">📌 '+esc(EX.answer_source)+'</div>';
-  h += '<div class="center" style="margin-bottom:10px">'+
-    '<button class="btn '+(tab==='reading'?'':'sec')+'" onclick="exercisesScreen(\'reading\')">A 閱讀測驗</button>'+
-    '<button class="btn '+(tab==='mc'?'':'sec')+'" onclick="exercisesScreen(\'mc\')">B 單字選擇</button></div>';
+  h += '<div class="center" style="margin-bottom:10px">'+exSections().map((s,i)=>
+    '<button class="btn '+(tab===s[0]?'':'sec')+'" onclick="exercisesScreen(\''+s[0]+'\')">'+String.fromCharCode(65+i)+' '+s[1]+'</button>').join('')+'</div>';
   if(tab==='reading'){
-    h += '<div class="card"><b>📖 對話短文</b> <button class="btn sec small" onclick="playDialogue()">🔊 整段朗讀</button><div style="margin-top:8px">';
-    EX.reading.dialogue.forEach(d=>{ h += '<div class="dlg-line"><span class="sp">'+esc(d.speaker)+':</span> '+clickableEn(d.text)+'</div>'; });
+    h += '<div class="card"><b>📖 '+(EX.reading.dialogue.some(d=>d.speaker)?'對話短文':'閱讀短文')+'</b> <button class="btn sec small" onclick="playDialogue()">🔊 整段朗讀</button><div style="margin-top:8px">';
+    EX.reading.dialogue.forEach(d=>{ h += '<div class="dlg-line">'+(d.speaker?'<span class="sp">'+esc(d.speaker)+':</span> ':'')+clickableEn(d.text)+'</div>'; });
     h += '<div class="muted" style="margin-top:6px">💡 '+esc(EX.reading.note)+'</div></div></div>';
     h += quizBlock(EX.reading.questions, 'rc');
+  }else if(tab==='cloze'){
+    h += '<div class="card"><b>📖 克漏字短文</b> <button class="btn sec small" onclick="playCloze()">🔊 整段朗讀</button><div style="margin-top:8px">';
+    EX.cloze.passage.forEach(t=>{ h += '<div class="dlg-line">'+clickableEn(t)+'</div>'; });
+    if(EX.cloze.note) h += '<div class="muted" style="margin-top:6px">💡 '+esc(EX.cloze.note)+'</div>';
+    h += '</div></div>';
+    h += quizBlock(EX.cloze.questions, 'cz');
   }else{
     h += quizBlock(EX.mc.questions, 'mc');
   }
   app.innerHTML = h; window.scrollTo(0,0);
+}
+function playCloze(){
+  speakSeq(DATA.exercises.cloze.passage.map(t=>({t:t.replace(/__\d+__/g,'blank'), rate:1})));
 }
 let EXA = {};
 function quizBlock(qs, prefix){
@@ -712,16 +730,39 @@ function quizBlock(qs, prefix){
   h += '<div class="card center"><b>已作答 '+answered+' / '+qs.length+'　答對 '+right+'</b><br><button class="btn warm-soft small" onclick="exReset(\''+prefix+'\','+qs.length+')">♻️ 重做這一區</button></div>';
   return h;
 }
+function exTabOf(prefix){ return prefix==='rc'?'reading':prefix==='cz'?'cloze':'mc'; }
 function exAnswer(prefix, qi, oi){
   EXA[prefix+qi]=oi;
-  exercisesScreen(prefix==='rc'?'reading':'mc');
+  exercisesScreen(exTabOf(prefix));
 }
 function exReset(prefix, n){
   for(let i=0;i<n;i++) delete EXA[prefix+i];
-  exercisesScreen(prefix==='rc'?'reading':'mc');
+  exercisesScreen(exTabOf(prefix));
 }
 function playDialogue(){
   speakSeq(DATA.exercises.reading.dialogue.map(d=>({t:d.text, rate:1})));
+}
+
+/* ================= reference（課本參考表，選配） ================= */
+function referenceScreen(){
+  const R = DATA.reference;
+  let h = '<div class="topnav"><button class="btn ghost small" onclick="home()">‹ 回首頁</button><span class="pill">🔢 '+esc(R.title)+'</span></div>';
+  h += '<div class="banner">點表格裡的英文字或例句中的字，都可以聽發音 🔊</div>';
+  (R.sections||[]).forEach(sec=>{
+    h += '<div class="card"><b>'+esc(sec.title)+'</b>';
+    if(sec.type==='table'){
+      h += '<div style="overflow-x:auto;margin-top:8px"><table class="ref-tb"><tr>'+sec.head.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
+      sec.rows.forEach(r=>{ h += '<tr>'+r.map(c=>'<td>'+(/^[A-Za-z][A-Za-z' -]*$/.test(c)? clickableEn(c):esc(c))+'</td>').join('')+'</tr>'; });
+      h += '</table></div>';
+    }else{
+      h += '<div style="margin-top:8px">';
+      (sec.items||[]).forEach((it,i)=>{ h += '<div class="sense"><span class="tag">'+(i+1)+'</span> <span style="font-size:.98rem">'+clickableEn(it)+'</span></div>'; });
+      h += '</div>';
+    }
+    if(sec.note) h += '<div class="muted" style="margin-top:6px">💡 '+clickableEn(sec.note)+'</div>';
+    h += '</div>';
+  });
+  app.innerHTML = h; window.scrollTo(0,0);
 }
 
 /* ================= boot ================= */
