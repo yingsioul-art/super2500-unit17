@@ -96,7 +96,8 @@ const byWord = {}; ALL.forEach(w=>byWord[w.word]=w);
 let S = null;
 try{ S = JSON.parse(localStorage.getItem(LSKEY)); }catch(e){}
 if(!S) S = {filter:'basic', cls:{}, plan:null, review:[], session:null};
-function save(){ localStorage.setItem(LSKEY, JSON.stringify(S)); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function save(){ (S.log=S.log||{})[todayStr()]=1; localStorage.setItem(LSKEY, JSON.stringify(S)); }
 function scopeWords(f){ f = f||S.filter; return ALL.filter(w=> f==='all' || w.level===f); }
 const app = document.getElementById('app');
 
@@ -621,6 +622,7 @@ function quizDone(){
     h += '<button class="btn ghost" onclick="home()">回首頁</button></div>';
   }else{
     if(S.plan){ S.plan.done[s.day-1]=true;
+      (S.plan.doneDates=S.plan.doneDates||{})[s.day-1]=todayStr();
       const next = S.plan.done.findIndex(x=>!x);
       if(next>=0) S.plan.cur = next+1;
     }
